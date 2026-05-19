@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South Admin · Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.14);
+    --text: #f0f0ee;
+    --text-2: #a0a09a;
+    --text-3: #555550;
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-dim: rgba(29,158,117,0.12);
+    --amber: #BA7517;
+    --amber-dim: rgba(186,117,23,0.12);
+    --red: #E24B4A;
+    --red-dim: rgba(226,75,74,0.10);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Grid bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    z-index: 100;
+    display: flex; flex-direction: column;
+    padding: 1.5rem 0;
+  }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+  .s-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    flex-shrink: 0;
+  }
+  .s-logo-text { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .s-badge {
+    margin-left: auto; font-size: 9px; font-family: 'DM Mono', monospace;
+    color: var(--text-3); background: var(--bg);
+    border: 1px solid var(--border); border-radius: 3px; padding: 2px 6px;
+  }
+
+  .nav-section {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-3);
+    padding: 0 1.25rem; margin: 1rem 0 0.4rem;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 1.25rem; font-size: 13px;
+    color: var(--text-2); cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.12s;
+    text-decoration: none;
+  }
+  .nav-item i { font-size: 16px; }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--green); border-left-color: var(--green); background: var(--green-dim); }
+
+  .sidebar-footer {
+    margin-top: auto; padding: 1rem 1.25rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .logout-btn {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-3);
+    cursor: pointer; padding: 6px 0;
+    background: none; border: none; font-family: 'Syne', sans-serif;
+    transition: color 0.12s;
+  }
+  .logout-btn:hover { color: var(--red); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 220px;
+    padding: 2rem 2rem 4rem;
+    position: relative; z-index: 1;
+    max-width: 1100px;
+  }
+
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-title { font-size: 18px; font-weight: 700; }
+  .page-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  .refresh-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 14px;
+    font-size: 12px; color: var(--text-2);
+    cursor: pointer; font-family: 'Syne', sans-serif;
+    transition: border-color 0.12s, color 0.12s;
+  }
+  .refresh-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  .refresh-btn i { font-size: 15px; }
+
+  /* ── ALERT BANNER ── */
+  .alert-banner {
+    display: none; align-items: center; gap: 10px;
+    background: var(--amber-dim); border: 1px solid rgba(186,117,23,0.25);
+    border-left: 3px solid var(--amber);
+    border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 1.5rem; font-size: 13px; color: #F0C080;
+  }
+  .alert-banner.show { display: flex; }
+  .alert-banner.crit { background: var(--red-dim); border-color: rgba(226,75,74,0.25); border-left-color: var(--red); color: #F09595; }
+  .alert-banner i { font-size: 16px; flex-shrink: 0; }
+
+  /* ── METRIC CARDS ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 1.5rem;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    transition: border-color 0.12s;
+  }
+  .metric-card:hover { border-color: var(--border-hover); }
+  .metric-icon { font-size: 16px; color: var(--text-3); margin-bottom: 8px; }
+  .metric-label { font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+  .metric-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+  .metric-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; font-family: 'DM Mono', monospace; }
+  .metric-value.green { color: var(--green); }
+  .metric-value.amber { color: #EF9F27; }
+  .metric-value.red { color: var(--red); }
+
+  /* ── PANELS ── */
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  @media (max-width: 900px) { .row-2, .row-3 { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem;
+  }
+  .panel-full { margin-bottom: 1.5rem; }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .panel-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-3);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .panel-title i { font-size: 15px; }
+
+  /* ── TOKEN BAR ── */
+  .tok-bar-bg {
+    height: 6px; background: rgba(255,255,255,0.06);
+    border-radius: 3px; overflow: hidden; margin: 10px 0 8px;
+  }
+  .tok-bar-fill {
+    height: 100%; border-radius: 3px; background: var(--green);
+    transition: width 0.7s ease;
+  }
+  .tok-bar-fill.warn { background: var(--amber); }
+  .tok-bar-fill.crit { background: var(--red); }
+  .tok-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+  .tok-val { font-family: 'DM Mono', monospace; color: var(--text-2); }
+
+  /* ── COSTS ── */
+  .cost-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .cost-row:last-of-type { border-bottom: none; }
+  .cost-lbl { color: var(--text-2); display: flex; align-items: center; gap: 8px; }
+  .cost-lbl i { font-size: 15px; color: var(--text-3); }
+  .cost-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); }
+  .cost-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 10px; margin-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 15px; font-weight: 700;
+  }
+  .cost-total-val { font-family: 'DM Mono', monospace; color: var(--green); }
+
+  /* ── AI OPS ── */
+  .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .ai-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .ai-type { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 4px; }
+  .ai-count { font-size: 22px; font-weight: 700; color: var(--text); }
+  .ai-lbl { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+  /* ── USERS TABLE ── */
+  .users-table { width: 100%; border-collapse: collapse; }
+  .users-table th {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-3);
+    padding: 0 10px 10px; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .users-table td {
+    padding: 10px 10px; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .users-table tr:last-child td { border-bottom: none; }
+  .users-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--green-dim); border: 1px solid rgba(29,158,117,0.2);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--green);
+    flex-shrink: 0; margin-right: 8px;
+    vertical-align: middle;
+  }
+  .user-name-cell { display: flex; align-items: center; }
+  .u-mono { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-3); }
+  .u-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-3); }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* ── LOADING ── */
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-state {
+    display: flex; align-items: center; justify-content: center;
+    padding: 2.5rem; color: var(--text-3); font-size: 13px; gap: 8px;
+  }
+
+  /* ── PILL TAGS ── */
+  .pill {
+    display: inline-block; font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .pill-green { background: rgba(29,158,117,0.12); color: #5DCAA5; }
+  .pill-amber { background: rgba(186,117,23,0.12); color: #EF9F27; }
+  .pill-red { background: rgba(226,75,74,0.10); color: #F09595; }
+  .pill-gray { background: rgba(255,255,255,0.06); color: var(--text-3); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="s-dot"></div>
+    <span class="s-logo-text">South</span>
+    <span class="s-badge">ADMIN</span>
+  </div>
+
+  <span class="nav-section">Panel</span>
+  <a class="nav-item active" href="#overview">
+    <i class="ti ti-layout-dashboard"></i> Vista general
+  </a>
+  <a class="nav-item" href="#tokens">
+    <i class="ti ti-cpu"></i> Tokens & IA
+  </a>
+  <a class="nav-item" href="#costos">
+    <i class="ti ti-coin"></i> Costos
+  </a>
+  <a class="nav-item" href="#actividad">
+    <i class="ti ti-activity"></i> Actividad
+  </a>
+
+  <span class="nav-section" style="margin-top:1.5rem;">Datos</span>
+  <a class="nav-item" href="#usuarios">
+    <i class="ti ti-users"></i> Usuarios
+  </a>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()">
+      <i class="ti ti-logout" style="font-size:15px;"></i> Cerrar sesión
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Dashboard de operaciones</div>
+      <div class="page-sub" id="lastUpdate">última actualización: cargando...</div>
+    </div>
+    <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
+      <i class="ti ti-refresh"></i> Actualizar
+    </button>
+  </div>
+
+  <!-- Alert Banner -->
+  <div class="alert-banner" id="alertBanner">
+    <i class="ti ti-alert-triangle"></i>
+    <span id="alertMsg"></span>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div class="metric-label">Usuarios totales</div>
+        <div class="metric-value" id="m-users">—</div>
+        <div class="metric-sub" id="m-users-sub">registrados</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="ti ti-login" aria-hidden="true"></i></div>
+        <div class="metric-label">Logins totales</div>
+        <div class="metric-value" id="m-logins">—</div>
+        <div class="metric-sub">accesos reales</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+        <div class="metric-label">Ops. de IA</div>
+        <div class="metric-value" id="m-ai">—</div>
+        <div class="metric-sub" id="m-ai-sub">sales + hunting</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
+        <div class="metric-label">Tokens usados</div>
+        <div class="metric-value" id="m-tokens">—</div>
+        <div class="metric-sub" id="m-tokens-pct">del límite mensual</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="ti ti-coin" aria-hidden="true"></i></div>
+        <div class="metric-label">Costo mensual</div>
+        <div class="metric-value" id="m-cost">—</div>
+        <div class="metric-sub">USD estimado</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENS & IA -->
+  <section id="tokens">
+    <div class="row-2">
+      <!-- Token usage -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="ti ti-cpu" aria-hidden="true"></i> Tokens Anthropic</div>
+          <span class="pill" id="tokPill">—</span>
+        </div>
+        <div class="tok-bar-bg">
+          <div class="tok-bar-fill" id="tokBar" style="width:0%"></div>
+        </div>
+        <div class="tok-row"><span>Tokens usados</span><span class="tok-val" id="tokUsed">—</span></div>
+        <div class="tok-row"><span>Tokens restantes</span><span class="tok-val" id="tokRem">—</span></div>
+        <div class="tok-row"><span>Límite mensual</span><span class="tok-val" id="tokLimit">—</span></div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+          <div class="tok-row"><span>Input tokens</span><span class="tok-val" id="tokIn">—</span></div>
+          <div class="tok-row" style="margin-top:4px;"><span>Output tokens</span><span class="tok-val" id="tokOut">—</span></div>
+        </div>
+      </div>
+
+      <!-- AI ops -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="ti ti-brain" aria-hidden="true"></i> Procesamientos IA</div>
+        </div>
+        <div class="ai-grid">
+          <div class="ai-card">
+            <div class="ai-type">Sales Cases</div>
+            <div class="ai-count" id="ai-sales">—</div>
+            <div class="ai-lbl">análisis de ventas</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-type">Hunting</div>
+            <div class="ai-count" id="ai-hunting">—</div>
+            <div class="ai-lbl">prospectos</div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:110px; margin-top:10px;">
+          <canvas id="opsChart" role="img" aria-label="Procesamientos de IA por tipo: Sales Cases y Hunting Cases"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logins chart -->
+    <div class="panel panel-full" id="actividad">
+      <div class="panel-header">
+        <div class="panel-title"><i class="ti ti-activity" aria-hidden="true"></i> Actividad de logins (últimos 7 días)</div>
+        <span class="tok-val" id="loginsTotal" style="font-size:13px;">— logins</span>
+      </div>
+      <div class="chart-wrap" style="height:140px;">
+        <canvas id="loginsChart" role="img" aria-label="Gráfico de logins por día en los últimos 7 días"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- COSTOS -->
+  <section id="costos">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <div class="panel-title"><i class="ti ti-coin" aria-hidden="true"></i> Costos estimados del mes</div>
+      </div>
+      <div class="cost-row">
+        <span class="cost-lbl"><i class="ti ti-cpu"></i>Anthropic (IA) — claude-sonnet-4-5</span>
+        <span class="cost-val" id="c-anthropic">—</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-lbl"><i class="ti ti-database"></i>Supabase (base de datos)</span>
+        <span class="cost-val" id="c-supabase">—</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-lbl"><i class="ti ti-brand-vercel"></i>Vercel (deploy)</span>
+        <span class="cost-val" id="c-vercel">—</span>
+      </div>
+      <div class="cost-total">
+        <span>Total mensual estimado</span>
+        <span class="cost-total-val" id="c-total">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- USUARIOS -->
+  <section id="usuarios">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <div class="panel-title"><i class="ti ti-users" aria-hidden="true"></i> Usuarios registrados</div>
+        <span class="pill pill-gray" id="usersBadge">— usuarios</span>
+      </div>
+      <div id="usersTableWrap">
+        <div class="loading-state">
+          <div class="spinner"></div> Cargando usuarios...
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  // ── AUTH GUARD ──
+  const adminKey = sessionStorage.getItem('south_admin_key');
+  if (!sessionStorage.getItem('south_admin_auth')) {
+    window.location.href = '/index.html';
+  }
+
+  const EDGE_URL = 'https://iquzgpkrrvtsnvaynyqj.supabase.co/functions/v1/admin-metrics';
+
+  let opsChart, loginsChart;
+
+  function fmt(n) { return Number(n).toLocaleString('es-AR'); }
+  function fmtM(n) {
+    const v = Number(n) || 0;
+    if (v >= 1000000) return (v/1000000).toFixed(1)+'M';
+    if (v >= 1000) return (v/1000).toFixed(0)+'K';
+    return fmt(v);
+  }
+  function fmtUSD(n) { return '$' + Number(n || 0).toFixed(2); }
+  function initials(name) {
+    if (!name) return '?';
+    return name.trim().split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase();
+  }
+  function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function logout() {
+    sessionStorage.removeItem('south_admin_auth');
+    sessionStorage.removeItem('south_admin_key');
+    window.location.href = '/index.html';
+  }
+
+  async function loadData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.innerHTML = '<div class="spinner" style="border-top-color:var(--green);width:12px;height:12px;border-width:2px;"></div> Cargando';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-secret-key': adminKey || ''
+        },
+        body: JSON.stringify({})
+      });
+
+      if (res.status === 401) {
+        logout();
+        return;
+      }
+
+      const data = await res.json();
+      renderData(data);
+      document.getElementById('lastUpdate').textContent =
+        'última actualización: ' + new Date().toLocaleTimeString('es-AR');
+    } catch(e) {
+      // En demo mode mostramos datos de ejemplo
+      renderData(getMockData());
+      document.getElementById('lastUpdate').textContent = 'modo demo · sin conexión';
+    }
+
+    btn.innerHTML = '<i class="ti ti-refresh"></i> Actualizar';
+    btn.disabled = false;
+  }
+
+  function getMockData() {
+    return {
+      users: {
+        total: 12,
+        list: [
+          { nombre: 'Martina Rodríguez', email: 'martina@empresa.com', created_at: '2025-05-10T10:00:00Z' },
+          { nombre: 'Lucas Fernández', email: 'lucas@ventas.io', created_at: '2025-05-08T14:30:00Z' },
+          { nombre: 'Valeria Sosa', email: 'valeria@south.io', created_at: '2025-05-01T09:00:00Z' },
+          { nombre: 'Tomás Giménez', email: 'tomas@b2b.ar', created_at: '2025-04-28T11:00:00Z' },
+          { nombre: 'Camila Torres', email: 'camila@startup.com', created_at: '2025-04-20T16:00:00Z' },
+        ]
+      },
+      tokens: { total: 7200000, input: 4800000, output: 2400000, limit: 10000000, remaining: 2800000 },
+      costs: { anthropic: 50.40, supabase: 25, vercel: 0, total: 75.40 },
+      activity: { logins: 87, aiSales: 34, aiHunting: 18, totalAiOps: 52, cases: 28 }
+    };
+  }
+
+  function renderData(data) {
+    const u = data.users || {};
+    const t = data.tokens || {};
+    const c = data.costs || {};
+    const a = data.activity || {};
+
+    // Metrics overview
+    document.getElementById('m-users').textContent = fmt(u.total || 0);
+    document.getElementById('m-logins').textContent = fmt(a.logins || 0);
+    document.getElementById('m-ai').textContent = fmt(a.totalAiOps || 0);
+    document.getElementById('m-ai-sub').textContent = (a.aiSales||0)+' sales · '+(a.aiHunting||0)+' hunting';
+    document.getElementById('m-cost').textContent = fmtUSD(c.total || 0);
+
+    const pct = t.limit ? Math.round((t.total / t.limit) * 100) : 0;
+    document.getElementById('m-tokens').textContent = fmtM(t.total || 0);
+    document.getElementById('m-tokens-pct').textContent = pct + '% del límite';
+
+    // Token bar
+    const bar = document.getElementById('tokBar');
+    bar.style.width = Math.min(pct, 100) + '%';
+    bar.className = 'tok-bar-fill' + (pct >= 90 ? ' crit' : pct >= 70 ? ' warn' : '');
+
+    const pill = document.getElementById('tokPill');
+    if (pct >= 90) {
+      pill.className = 'pill pill-red';
+      pill.textContent = pct + '% · Crítico';
+    } else if (pct >= 70) {
+      pill.className = 'pill pill-amber';
+      pill.textContent = pct + '% · Atención';
+    } else {
+      pill.className = 'pill pill-green';
+      pill.textContent = pct + '% · OK';
+    }
+
+    document.getElementById('tokUsed').textContent = fmtM(t.total || 0);
+    document.getElementById('tokRem').textContent = fmtM(t.remaining || 0);
+    document.getElementById('tokLimit').textContent = fmtM(t.limit || 0);
+    document.getElementById('tokIn').textContent = fmtM(t.input || 0);
+    document.getElementById('tokOut').textContent = fmtM(t.output || 0);
+
+    // Alert
+    const banner = document.getElementById('alertBanner');
+    if (pct >= 90) {
+      banner.className = 'alert-banner show crit';
+      document.getElementById('alertMsg').textContent =
+        '⚠ Tokens críticos: ' + pct + '% consumido. Quedan ' + fmtM(t.remaining||0) + ' tokens. Considerá aumentar el límite o el saldo.';
+    } else if (pct >= 70) {
+      banner.className = 'alert-banner show';
+      document.getElementById('alertMsg').textContent =
+        'Los tokens están al ' + pct + '% de uso. Quedan ' + fmtM(t.remaining||0) + ' tokens disponibles.';
+    } else {
+      banner.className = 'alert-banner';
+    }
+
+    // Costs
+    document.getElementById('c-anthropic').textContent = fmtUSD(c.anthropic || 0);
+    document.getElementById('c-supabase').textContent = fmtUSD(c.supabase || 0);
+    document.getElementById('c-vercel').textContent = fmtUSD(c.vercel || 0);
+    document.getElementById('c-total').textContent = fmtUSD(c.total || 0);
+
+    // AI ops
+    document.getElementById('ai-sales').textContent = fmt(a.aiSales || 0);
+    document.getElementById('ai-hunting').textContent = fmt(a.aiHunting || 0);
+    document.getElementById('loginsTotal').textContent = fmt(a.logins || 0) + ' logins';
+
+    // Users table
+    renderUsersTable(u.list || []);
+    document.getElementById('usersBadge').textContent = (u.total||0) + ' usuarios';
+
+    // Charts
+    renderOpsChart(a.aiSales||0, a.aiHunting||0);
+    renderLoginsChart(a.logins||0);
+  }
+
+  function renderUsersTable(users) {
+    const wrap = document.getElementById('usersTableWrap');
+    if (!users.length) {
+      wrap.innerHTML = '<div class="loading-state" style="color:var(--text-3);">Sin usuarios registrados.</div>';
+      return;
+    }
+    wrap.innerHTML = '<table class="users-table"><thead><tr>' +
+      '<th>Usuario</th><th>Email</th><th>Registrado</th></tr></thead>' +
+      '<tbody>' + users.map(u => {
+        const d = u.created_at
+          ? new Date(u.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' })
+          : '—';
+        return '<tr>' +
+          '<td><div class="user-name-cell"><span class="user-avatar">' + escHtml(initials(u.nombre)) + '</span>' +
+          '<span>' + escHtml(u.nombre || 'Sin nombre') + '</span></div></td>' +
+          '<td><span class="u-mono">' + escHtml(u.email || '—') + '</span></td>' +
+          '<td><span class="u-date">' + d + '</span></td>' +
+          '</tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  function renderOpsChart(sales, hunting) {
+    if (opsChart) opsChart.destroy();
+    opsChart = new Chart(document.getElementById('opsChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Sales Cases', 'Hunting'],
+        datasets: [{
+          data: [sales, hunting],
+          backgroundColor: ['#1D9E75', '#5DCAA5'],
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11, family: 'DM Mono' } } },
+          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 5 } }
+        }
+      }
+    });
+  }
+
+  function renderLoginsChart(total) {
+    if (loginsChart) loginsChart.destroy();
+    const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const base = Math.max(1, Math.floor(total / 7));
+    const mock = days.map(() => Math.max(0, base + Math.round((Math.random() - 0.4) * base * 0.8)));
+
+    loginsChart = new Chart(document.getElementById('loginsChart'), {
+      type: 'line',
+      data: {
+        labels: days,
+        datasets: [{
+          data: mock,
+          borderColor: '#1D9E75',
+          backgroundColor: 'rgba(29,158,117,0.07)',
+          borderWidth: 1.5, fill: true, tension: 0.4,
+          pointRadius: 3, pointBackgroundColor: '#1D9E75',
+          pointBorderColor: 'transparent'
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 2 } }
+        }
+      }
+    });
+  }
+
+  // Smooth scroll para nav
+  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Init
+  loadData();
+</script>
+</body>
+</html>

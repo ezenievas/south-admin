@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South Admin · Acceso</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.16);
+    --text: #f0f0ee;
+    --muted: #666660;
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-glow: rgba(29,158,117,0.15);
+    --red: #E24B4A;
+    --red-bg: rgba(226,75,74,0.08);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .login-wrap {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 400px;
+    padding: 0 1.5rem;
+  }
+
+  .logo-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 2.5rem;
+  }
+  .logo-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green);
+  }
+  .logo-text {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text);
+  }
+  .logo-badge {
+    margin-left: auto;
+    font-size: 10px; font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 8px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .card-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .field input:focus { border-color: var(--green); }
+  .field input::placeholder { color: var(--muted); }
+
+  .btn-login {
+    width: 100%; margin-top: 1.5rem;
+    background: var(--green);
+    color: white; border: none;
+    border-radius: 8px; padding: 11px;
+    font-size: 14px; font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-login:hover { background: var(--green-dark); }
+  .btn-login:active { transform: scale(0.99); }
+  .btn-login:disabled {
+    background: #1a2e28; color: #2d5e4e;
+    cursor: not-allowed; transform: none;
+  }
+
+  .error-msg {
+    margin-top: 1rem;
+    background: var(--red-bg);
+    border: 1px solid rgba(226,75,74,0.2);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: var(--red);
+    display: none; align-items: center; gap: 8px;
+  }
+  .error-msg.show { display: flex; }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .footer-note {
+    text-align: center; margin-top: 1.5rem;
+    font-size: 11px; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="logo-row">
+    <div class="logo-dot"></div>
+    <span class="logo-text">South Sales</span>
+    <span class="logo-badge">BACKOFFICE</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Acceso interno</div>
+    <div class="card-sub">Panel de administración · Solo uso del equipo South</div>
+
+    <div class="field">
+      <label>Contraseña de acceso</label>
+      <input type="password" id="password" placeholder="••••••••••••"
+        autocomplete="current-password" />
+    </div>
+
+    <div class="error-msg" id="errorMsg">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6.5" stroke="currentColor"/>
+        <path d="M7 4v3.5M7 10h.01" stroke="currentColor" stroke-linecap="round"/>
+      </svg>
+      <span id="errorText">Contraseña incorrecta</span>
+    </div>
+
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">
+      Ingresar al panel
+    </button>
+  </div>
+
+  <div class="footer-note">south-admin · acceso restringido</div>
+</div>
+
+<script>
+  // El password se valida contra la Edge Function admin-metrics
+  // Si la Edge Function responde 401, el password es incorrecto
+  // Si responde 200, redirigimos al dashboard con el secret guardado en sessionStorage
+
+  // Config: apunta a tu Edge Function de admin-metrics
+  const EDGE_URL = 'https://iquzgpkrrvtsnvaynyqj.supabase.co/functions/v1/admin-metrics';
+
+  document.getElementById('password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function doLogin() {
+    const password = document.getElementById('password').value.trim();
+    if (!password) return showError('Ingresá la contraseña');
+
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Verificando...';
+    hideError();
+
+    try {
+      const res = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-secret-key': password
+        },
+        body: JSON.stringify({ ping: true })
+      });
+
+      if (res.status === 401) {
+        showError('Contraseña incorrecta');
+      } else if (res.ok || res.status === 200) {
+        // Guardar en sessionStorage (se borra al cerrar el tab)
+        sessionStorage.setItem('south_admin_key', password);
+        sessionStorage.setItem('south_admin_auth', '1');
+        window.location.href = '/dashboard.html';
+      } else {
+        showError('Error al conectar (' + res.status + ')');
+      }
+    } catch(e) {
+      showError('No se pudo conectar con el servidor');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Ingresar al panel';
+  }
+
+  function showError(msg) {
+    document.getElementById('errorText').textContent = msg;
+    document.getElementById('errorMsg').classList.add('show');
+  }
+  function hideError() {
+    document.getElementById('errorMsg').classList.remove('show');
+  }
+</script>
+</body>
+</html>
