@@ -37,7 +37,6 @@
     min-height: 100vh;
   }
 
-  /* Grid bg */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -290,61 +289,170 @@
   }
   .pill-green { background: rgba(29,158,117,0.12); color: #5DCAA5; }
   .pill-amber { background: rgba(186,117,23,0.12); color: #EF9F27; }
-  .pill-red { background: rgba(226,75,74,0.10); color: #F09595; }
-  .pill-gray { background: rgba(255,255,255,0.06); color: var(--text-3); border: 1px solid var(--border); }
+  .pill-red   { background: rgba(226,75,74,0.10);  color: #F09595; }
+  .pill-gray  { background: rgba(255,255,255,0.06); color: var(--text-3); border: 1px solid var(--border); }
 
   /* ── TICKETS ── */
   .ticket-row { cursor: pointer; transition: background 0.12s; }
   .ticket-row:hover td { background: rgba(255,255,255,0.03) !important; }
-  .tc-type { padding:2px 7px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-family:'DM Mono',monospace; }
-  .tc-type.error { background:rgba(226,75,74,.12); color:#F09595; }
-  .tc-type.feature { background:rgba(186,117,23,.12); color:#EF9F27; }
-  .tc-status { padding:2px 7px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; font-family:'DM Mono',monospace; }
-  .tc-status.open { background:rgba(186,117,23,.12); color:#EF9F27; }
-  .tc-status.progress { background:rgba(29,158,117,.12); color:#5DCAA5; }
-  .tc-status.closed { background:rgba(255,255,255,.06); color:var(--text-3); }
 
-  /* ── DETAIL PANEL ── */
-  .detail-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;backdrop-filter:blur(2px); }
-  .detail-overlay.open { display:block; }
-  .detail-panel {
-    position:fixed;top:0;right:0;bottom:0;width:480px;
-    background:var(--surface);border-left:1px solid var(--border-hover);
-    z-index:201;display:flex;flex-direction:column;
-    transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+  .tc-num {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--text-3); font-weight: 500;
   }
-  .detail-panel.open { transform:translateX(0); }
-  .dp-head { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex;align-items:flex-start;gap:10px;flex-shrink:0; }
-  .dp-close { background:var(--surface2);border:1px solid var(--border);color:var(--text-3);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0; }
-  .dp-close:hover { color:var(--text);border-color:var(--border-hover); }
-  .dp-body { flex:1;overflow-y:auto;padding:1.25rem 1.5rem; }
-  .dp-section { font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px; }
-  .dp-msg-box { background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--text-2);line-height:1.65;white-space:pre-wrap; }
-  .dp-reply-box { background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.2);border-radius:9px;padding:14px;margin-bottom:14px; }
-  .dp-reply-lbl { font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:6px; }
-  .dp-reply-text { font-size:12px;color:var(--text-2);line-height:1.6;white-space:pre-wrap; }
-  .dp-foot { padding:1rem 1.5rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:8px; }
-  .dp-status-row { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
-  .dp-status-lbl { font-size:11px;color:var(--text-3); }
-  .st-btn { padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text-3);font-family:'Syne',sans-serif;transition:all .12s; }
-  .st-btn:hover { border-color:var(--border-hover);color:var(--text-2); }
-  .st-btn.active-open { border-color:rgba(186,117,23,.5);color:#EF9F27;background:rgba(186,117,23,.08); }
-  .st-btn.active-progress { border-color:rgba(29,158,117,.5);color:var(--green);background:var(--green-dim); }
-  .st-btn.active-closed { border-color:rgba(255,255,255,.15);color:var(--text-2); }
-  .dp-textarea { width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-family:'DM Mono',monospace;outline:none;min-height:80px;resize:vertical;transition:border-color .12s;line-height:1.55; }
-  .dp-textarea:focus { border-color:var(--green); }
-  .dp-textarea::placeholder { color:var(--text-3); }
-  .dp-send-btn { padding:9px 18px;border-radius:8px;background:var(--green);color:white;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .12s;align-self:flex-end; }
-  .dp-send-btn:hover { background:var(--green-dark); }
-  .dp-send-btn:disabled { opacity:.4;cursor:not-allowed; }
-  .dp-close-only { padding:9px 18px;border-radius:8px;background:var(--surface2);color:var(--text-2);border:1px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .12s;align-self:flex-end; }
-  .dp-close-only:hover { border-color:var(--border-hover);color:var(--text); }
+  .tc-type {
+    padding: 2px 7px; border-radius: 4px; font-size: 9px;
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: .04em; font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+  .tc-type.error   { background: rgba(226,75,74,.12);  color: #F09595; }
+  .tc-type.feature { background: rgba(186,117,23,.12); color: #EF9F27; }
+  .tc-status {
+    padding: 2px 7px; border-radius: 4px; font-size: 9px;
+    font-weight: 700; text-transform: uppercase;
+    font-family: 'DM Mono', monospace; white-space: nowrap;
+  }
+  .tc-status.open     { background: rgba(186,117,23,.12); color: #EF9F27; }
+  .tc-status.progress { background: rgba(29,158,117,.12); color: #5DCAA5; }
+  .tc-status.closed   { background: rgba(255,255,255,.06); color: var(--text-3); }
 
-  .filters-row { display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap; }
-  .f-pill { padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-3);font-family:'Syne',sans-serif;transition:all .12s; }
-  .f-pill:hover { border-color:var(--border-hover);color:var(--text-2); }
-  .f-pill.active { background:var(--green);border-color:var(--green);color:white; }
-  .tickets-empty { display:flex;align-items:center;justify-content:center;padding:2.5rem;color:var(--text-3);font-size:13px;gap:8px; }
+  /* ── FILTER PILLS ── */
+  .filters-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .f-pill {
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; cursor: pointer; border: 1px solid var(--border);
+    background: transparent; color: var(--text-3);
+    font-family: 'Syne', sans-serif; transition: all .12s;
+  }
+  .f-pill:hover { border-color: var(--border-hover); color: var(--text-2); }
+  .f-pill.active { background: var(--green); border-color: var(--green); color: white; }
+  .tickets-empty {
+    display: flex; align-items: center; justify-content: center;
+    padding: 2.5rem; color: var(--text-3); font-size: 13px; gap: 8px;
+  }
+
+  /* ── DETAIL SLIDE PANEL ── */
+  .detail-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    z-index: 200; display: none; backdrop-filter: blur(2px);
+  }
+  .detail-overlay.open { display: block; }
+  .detail-panel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 500px;
+    background: var(--surface); border-left: 1px solid var(--border-hover);
+    z-index: 201; display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
+  }
+  .detail-panel.open { transform: translateX(0); }
+
+  .dp-head {
+    padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 10px; flex-shrink: 0;
+  }
+  .dp-close {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-3); width: 28px; height: 28px; border-radius: 7px;
+    cursor: pointer; font-size: 15px; display: flex; align-items: center;
+    justify-content: center; transition: all .12s; flex-shrink: 0;
+  }
+  .dp-close:hover { color: var(--text); border-color: var(--border-hover); }
+
+  .dp-head-info { flex: 1; min-width: 0; }
+  .dp-ticket-num {
+    font-size: 10px; font-family: 'DM Mono', monospace;
+    color: var(--text-3); margin-bottom: 4px;
+  }
+  .dp-title {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    margin-bottom: 6px; word-break: break-word;
+  }
+  .dp-meta {
+    font-size: 11px; color: var(--text-3);
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+
+  .dp-body { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; }
+
+  .dp-section {
+    font-size: 9px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 8px;
+  }
+  .dp-msg-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 9px; padding: 14px; margin-bottom: 14px;
+    font-size: 13px; color: var(--text-2); line-height: 1.65;
+    white-space: pre-wrap;
+  }
+  .dp-reply-box {
+    background: rgba(29,158,117,.06); border: 1px solid rgba(29,158,117,.2);
+    border-radius: 9px; padding: 14px; margin-bottom: 14px;
+  }
+  .dp-reply-lbl {
+    font-size: 9px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--green); margin-bottom: 6px;
+  }
+  .dp-reply-text {
+    font-size: 12px; color: var(--text-2); line-height: 1.6; white-space: pre-wrap;
+  }
+
+  .dp-foot {
+    padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+    flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
+  }
+  .dp-status-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .dp-status-lbl { font-size: 11px; color: var(--text-3); }
+
+  .st-btn {
+    padding: 5px 12px; border-radius: 7px; font-size: 11px; font-weight: 700;
+    cursor: pointer; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-3);
+    font-family: 'Syne', sans-serif; transition: all .12s;
+  }
+  .st-btn:hover { border-color: var(--border-hover); color: var(--text-2); }
+  .st-btn.active-open     { border-color: rgba(186,117,23,.5); color: #EF9F27; background: rgba(186,117,23,.08); }
+  .st-btn.active-progress { border-color: rgba(29,158,117,.5); color: var(--green); background: var(--green-dim); }
+  .st-btn.active-closed   { border-color: rgba(255,255,255,.15); color: var(--text-2); }
+
+  .dp-textarea {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace;
+    outline: none; min-height: 80px; resize: vertical;
+    transition: border-color .12s; line-height: 1.55;
+  }
+  .dp-textarea:focus { border-color: var(--green); }
+  .dp-textarea::placeholder { color: var(--text-3); }
+
+  .dp-send-btn {
+    padding: 9px 18px; border-radius: 8px; background: var(--green);
+    color: white; border: none; font-size: 12px; font-weight: 700;
+    cursor: pointer; font-family: 'Syne', sans-serif;
+    transition: all .12s; align-self: flex-end;
+  }
+  .dp-send-btn:hover { background: var(--green-dark); }
+  .dp-send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .dp-close-only {
+    padding: 9px 18px; border-radius: 8px; background: var(--surface2);
+    color: var(--text-2); border: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: 'Syne', sans-serif; transition: all .12s; align-self: flex-end;
+  }
+  .dp-close-only:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* ── TICKET OVERVIEW CARD ── */
+  .ticket-overview {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin-bottom: 12px;
+  }
+  .tok-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; text-align: center;
+  }
+  .tok-card-val { font-size: 20px; font-weight: 700; color: var(--text); }
+  .tok-card-lbl { font-size: 10px; color: var(--text-3); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -358,25 +466,15 @@
   </div>
 
   <span class="nav-section">Panel</span>
-  <a class="nav-item active" href="#overview">
-    <i class="ti ti-layout-dashboard"></i> Vista general
-  </a>
-  <a class="nav-item" href="#tokens">
-    <i class="ti ti-cpu"></i> Tokens & IA
-  </a>
-  <a class="nav-item" href="#costos">
-    <i class="ti ti-coin"></i> Costos
-  </a>
-  <a class="nav-item" href="#actividad">
-    <i class="ti ti-activity"></i> Actividad
-  </a>
+  <a class="nav-item active" href="#overview"><i class="ti ti-layout-dashboard"></i> Vista general</a>
+  <a class="nav-item" href="#tokens"><i class="ti ti-cpu"></i> Tokens & IA</a>
+  <a class="nav-item" href="#costos"><i class="ti ti-coin"></i> Costos</a>
+  <a class="nav-item" href="#actividad"><i class="ti ti-activity"></i> Actividad</a>
 
-  <span class="nav-section" style="margin-top:1.5rem;">Datos</span>
-  <a class="nav-item" href="#usuarios">
-    <i class="ti ti-users"></i> Usuarios
-  </a>
+  <span class="nav-section" style="margin-top:1.5rem">Datos</span>
+  <a class="nav-item" href="#usuarios"><i class="ti ti-users"></i> Usuarios</a>
 
-  <span class="nav-section" style="margin-top:1.5rem;">Soporte</span>
+  <span class="nav-section" style="margin-top:1.5rem">Soporte</span>
   <a class="nav-item" href="#soporte" id="nav-soporte">
     <i class="ti ti-message-circle"></i> Tickets
     <span id="badge-support" style="margin-left:auto;background:var(--red);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;display:none">0</span>
@@ -388,7 +486,7 @@
 
   <div class="sidebar-footer">
     <button class="logout-btn" onclick="logout()">
-      <i class="ti ti-logout" style="font-size:15px;"></i> Cerrar sesión
+      <i class="ti ti-logout" style="font-size:15px"></i> Cerrar sesión
     </button>
   </div>
 </aside>
@@ -402,7 +500,7 @@
       <div class="page-title">Dashboard de operaciones</div>
       <div class="page-sub" id="lastUpdate">última actualización: cargando...</div>
     </div>
-    <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
+    <button class="refresh-btn" onclick="loadAll()" id="refreshBtn">
       <i class="ti ti-refresh"></i> Actualizar
     </button>
   </div>
@@ -417,31 +515,31 @@
   <section id="overview">
     <div class="metrics-grid">
       <div class="metric-card">
-        <div class="metric-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div class="metric-icon"><i class="ti ti-users"></i></div>
         <div class="metric-label">Usuarios totales</div>
         <div class="metric-value" id="m-users">—</div>
-        <div class="metric-sub" id="m-users-sub">registrados</div>
+        <div class="metric-sub">registrados</div>
       </div>
       <div class="metric-card">
-        <div class="metric-icon"><i class="ti ti-login" aria-hidden="true"></i></div>
+        <div class="metric-icon"><i class="ti ti-login"></i></div>
         <div class="metric-label">Logins totales</div>
         <div class="metric-value" id="m-logins">—</div>
         <div class="metric-sub">accesos reales</div>
       </div>
       <div class="metric-card">
-        <div class="metric-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+        <div class="metric-icon"><i class="ti ti-brain"></i></div>
         <div class="metric-label">Ops. de IA</div>
         <div class="metric-value" id="m-ai">—</div>
-        <div class="metric-sub" id="m-ai-sub">sales + hunting</div>
+        <div class="metric-sub" id="m-ai-sub">0 sales · 0 hunting</div>
       </div>
       <div class="metric-card">
-        <div class="metric-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
+        <div class="metric-icon"><i class="ti ti-cpu"></i></div>
         <div class="metric-label">Tokens usados</div>
         <div class="metric-value" id="m-tokens">—</div>
         <div class="metric-sub" id="m-tokens-pct">del límite mensual</div>
       </div>
       <div class="metric-card">
-        <div class="metric-icon"><i class="ti ti-coin" aria-hidden="true"></i></div>
+        <div class="metric-icon"><i class="ti ti-coin"></i></div>
         <div class="metric-label">Costo mensual</div>
         <div class="metric-value" id="m-cost">—</div>
         <div class="metric-sub">USD estimado</div>
@@ -455,7 +553,7 @@
       <!-- Token usage -->
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title"><i class="ti ti-cpu" aria-hidden="true"></i> Tokens Anthropic</div>
+          <div class="panel-title"><i class="ti ti-cpu"></i> Tokens Anthropic</div>
           <span class="pill" id="tokPill">—</span>
         </div>
         <div class="tok-bar-bg">
@@ -464,16 +562,16 @@
         <div class="tok-row"><span>Tokens usados</span><span class="tok-val" id="tokUsed">—</span></div>
         <div class="tok-row"><span>Tokens restantes</span><span class="tok-val" id="tokRem">—</span></div>
         <div class="tok-row"><span>Límite mensual</span><span class="tok-val" id="tokLimit">—</span></div>
-        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
           <div class="tok-row"><span>Input tokens</span><span class="tok-val" id="tokIn">—</span></div>
-          <div class="tok-row" style="margin-top:4px;"><span>Output tokens</span><span class="tok-val" id="tokOut">—</span></div>
+          <div class="tok-row" style="margin-top:4px"><span>Output tokens</span><span class="tok-val" id="tokOut">—</span></div>
         </div>
       </div>
 
       <!-- AI ops -->
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title"><i class="ti ti-brain" aria-hidden="true"></i> Procesamientos IA</div>
+          <div class="panel-title"><i class="ti ti-brain"></i> Procesamientos IA</div>
         </div>
         <div class="ai-grid">
           <div class="ai-card">
@@ -487,8 +585,8 @@
             <div class="ai-lbl">prospectos</div>
           </div>
         </div>
-        <div class="chart-wrap" style="height:110px; margin-top:10px;">
-          <canvas id="opsChart" role="img" aria-label="Procesamientos de IA por tipo: Sales Cases y Hunting Cases"></canvas>
+        <div class="chart-wrap" style="height:110px;margin-top:10px">
+          <canvas id="opsChart"></canvas>
         </div>
       </div>
     </div>
@@ -496,11 +594,11 @@
     <!-- Logins chart -->
     <div class="panel panel-full" id="actividad">
       <div class="panel-header">
-        <div class="panel-title"><i class="ti ti-activity" aria-hidden="true"></i> Actividad de logins (últimos 7 días)</div>
-        <span class="tok-val" id="loginsTotal" style="font-size:13px;">— logins</span>
+        <div class="panel-title"><i class="ti ti-activity"></i> Actividad de logins (últimos 7 días)</div>
+        <span class="tok-val" id="loginsTotal" style="font-size:13px">— logins</span>
       </div>
-      <div class="chart-wrap" style="height:140px;">
-        <canvas id="loginsChart" role="img" aria-label="Gráfico de logins por día en los últimos 7 días"></canvas>
+      <div class="chart-wrap" style="height:140px">
+        <canvas id="loginsChart"></canvas>
       </div>
     </div>
   </section>
@@ -509,7 +607,7 @@
   <section id="costos">
     <div class="panel panel-full">
       <div class="panel-header">
-        <div class="panel-title"><i class="ti ti-coin" aria-hidden="true"></i> Costos estimados del mes</div>
+        <div class="panel-title"><i class="ti ti-coin"></i> Costos estimados del mes</div>
       </div>
       <div class="cost-row">
         <span class="cost-lbl"><i class="ti ti-cpu"></i>Anthropic (IA) — claude-sonnet-4-5</span>
@@ -534,13 +632,11 @@
   <section id="usuarios">
     <div class="panel panel-full">
       <div class="panel-header">
-        <div class="panel-title"><i class="ti ti-users" aria-hidden="true"></i> Usuarios registrados</div>
+        <div class="panel-title"><i class="ti ti-users"></i> Usuarios registrados</div>
         <span class="pill pill-gray" id="usersBadge">— usuarios</span>
       </div>
       <div id="usersTableWrap">
-        <div class="loading-state">
-          <div class="spinner"></div> Cargando usuarios...
-        </div>
+        <div class="loading-state"><div class="spinner"></div> Cargando usuarios...</div>
       </div>
     </div>
   </section>
@@ -549,8 +645,23 @@
   <section id="soporte" style="scroll-margin-top:1.5rem">
     <div class="panel panel-full">
       <div class="panel-header">
-        <div class="panel-title"><i class="ti ti-message-circle" aria-hidden="true"></i> Tickets de soporte</div>
+        <div class="panel-title"><i class="ti ti-message-circle"></i> Tickets de soporte</div>
         <span class="pill pill-gray" id="support-badge-count">cargando…</span>
+      </div>
+      <!-- Mini overview de estados -->
+      <div class="ticket-overview" id="support-overview" style="display:none">
+        <div class="tok-card">
+          <div class="tok-card-val" id="so-open" style="color:#EF9F27">0</div>
+          <div class="tok-card-lbl">🟡 Abiertos</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-card-val" id="so-progress" style="color:#5DCAA5">0</div>
+          <div class="tok-card-lbl">🟢 En curso</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-card-val" id="so-closed" style="color:var(--text-3)">0</div>
+          <div class="tok-card-lbl">⚫ Cerrados</div>
+        </div>
       </div>
       <div class="filters-row" id="support-filters">
         <button class="f-pill active" onclick="filterTickets('all','support',this)">Todos</button>
@@ -568,14 +679,29 @@
   <section id="features" style="scroll-margin-top:1.5rem">
     <div class="panel panel-full">
       <div class="panel-header">
-        <div class="panel-title"><i class="ti ti-bulb" aria-hidden="true"></i> Feature requests</div>
+        <div class="panel-title"><i class="ti ti-bulb"></i> Feature requests</div>
         <span class="pill pill-gray" id="features-badge-count">cargando…</span>
+      </div>
+      <!-- Mini overview de estados -->
+      <div class="ticket-overview" id="features-overview" style="display:none">
+        <div class="tok-card">
+          <div class="tok-card-val" id="fo-open" style="color:#EF9F27">0</div>
+          <div class="tok-card-lbl">🟡 Abiertos</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-card-val" id="fo-progress" style="color:#5DCAA5">0</div>
+          <div class="tok-card-lbl">🟢 En curso</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-card-val" id="fo-closed" style="color:var(--text-3)">0</div>
+          <div class="tok-card-lbl">⚫ Revisados</div>
+        </div>
       </div>
       <div class="filters-row" id="features-filters">
         <button class="f-pill active" onclick="filterTickets('all','features',this)">Todos</button>
         <button class="f-pill" onclick="filterTickets('open','features',this)">🟡 Abierto</button>
         <button class="f-pill" onclick="filterTickets('progress','features',this)">🟢 En curso</button>
-        <button class="f-pill" onclick="filterTickets('closed','features',this)">⚫ Cerrado</button>
+        <button class="f-pill" onclick="filterTickets('closed','features',this)">⚫ Revisado</button>
       </div>
       <div id="features-table-wrap">
         <div class="loading-state"><div class="spinner"></div> Cargando features...</div>
@@ -588,13 +714,14 @@
 <!-- DETAIL OVERLAY -->
 <div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
 
-<!-- DETAIL PANEL -->
+<!-- DETAIL SLIDE PANEL -->
 <div class="detail-panel" id="detail-panel">
   <div class="dp-head">
     <button class="dp-close" onclick="closeDetail()">×</button>
-    <div style="flex:1">
-      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px" id="dp-title">—</div>
-      <div style="font-size:11px;color:var(--text-3);display:flex;gap:10px;flex-wrap:wrap" id="dp-meta"></div>
+    <div class="dp-head-info">
+      <div class="dp-ticket-num" id="dp-ticket-num">—</div>
+      <div class="dp-title" id="dp-title">—</div>
+      <div class="dp-meta" id="dp-meta"></div>
     </div>
   </div>
   <div class="dp-body" id="dp-body"></div>
@@ -603,480 +730,601 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-  // ── AUTH GUARD ──
-  const adminKey = sessionStorage.getItem('south_admin_key');
-  if (!sessionStorage.getItem('south_admin_auth')) {
-    window.location.href = '/index.html';
+'use strict';
+
+// ── AUTH GUARD ──────────────────────────────────────────────────────────────
+const adminKey = sessionStorage.getItem('south_admin_key');
+if (!sessionStorage.getItem('south_admin_auth')) {
+  window.location.href = '/index.html';
+}
+
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const EDGE_URL      = 'https://iquzgpkrrvtsnvaynyqj.supabase.co/functions/v1/admin-metrics';
+const SUPABASE_URL  = 'https://iquzgpkrrvtsnvaynyqj.supabase.co';
+// Anon key sólo para escritura de tickets (INSERT con RLS auth.uid() ok)
+// La lectura y modificación usan el Edge Function admin-metrics (service role)
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxdXpncGtycnZ0c252YXlueXFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDU5NTIsImV4cCI6MjA5MzY4MTk1Mn0.oP3WYTbgmQ3l15pFVFaw440AI-ViMxmiAAU471Eu8GI';
+
+let opsChart, loginsChart;
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+function fmt(n)     { return Number(n || 0).toLocaleString('es-AR'); }
+function fmtM(n) {
+  const v = Number(n) || 0;
+  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + 'M';
+  if (v >= 1_000)     return (v / 1_000).toFixed(0) + 'K';
+  return fmt(v);
+}
+function fmtUSD(n)  { return '$' + Number(n || 0).toFixed(2); }
+function initials(name) {
+  if (!name) return '?';
+  return name.trim().split(/\s+/).slice(0, 2).map(p => p[0]).join('').toUpperCase();
+}
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function logout() {
+  sessionStorage.removeItem('south_admin_auth');
+  sessionStorage.removeItem('south_admin_key');
+  window.location.href = '/index.html';
+}
+
+// ── TOAST ───────────────────────────────────────────────────────────────────
+let _toastEl;
+function showToast(msg, isErr) {
+  if (!_toastEl) {
+    _toastEl = document.createElement('div');
+    _toastEl.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:#1c1c1c;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:11px 16px;font-size:12px;color:#f0f0ee;transition:all .25s;transform:translateY(12px);opacity:0;max-width:320px;font-family:Syne,sans-serif';
+    document.body.appendChild(_toastEl);
   }
+  _toastEl.textContent = msg;
+  _toastEl.style.borderColor = isErr ? 'rgba(226,75,74,.3)' : 'rgba(29,158,117,.3)';
+  _toastEl.style.opacity = '1';
+  _toastEl.style.transform = 'translateY(0)';
+  clearTimeout(_toastEl._t);
+  _toastEl._t = setTimeout(() => {
+    _toastEl.style.opacity = '0';
+    _toastEl.style.transform = 'translateY(12px)';
+  }, 3200);
+}
 
-  const EDGE_URL = 'https://iquzgpkrrvtsnvaynyqj.supabase.co/functions/v1/admin-metrics';
+// ── LOAD MAIN METRICS (via admin-metrics Edge Function) ──────────────────────
+async function loadData() {
+  const btn = document.getElementById('refreshBtn');
+  btn.innerHTML = '<div class="spinner" style="border-top-color:var(--green);width:12px;height:12px;border-width:2px;margin-right:4px"></div> Cargando';
+  btn.disabled = true;
 
-  let opsChart, loginsChart;
-
-  function fmt(n) { return Number(n).toLocaleString('es-AR'); }
-  function fmtM(n) {
-    const v = Number(n) || 0;
-    if (v >= 1000000) return (v/1000000).toFixed(1)+'M';
-    if (v >= 1000) return (v/1000).toFixed(0)+'K';
-    return fmt(v);
-  }
-  function fmtUSD(n) { return '$' + Number(n || 0).toFixed(2); }
-  function initials(name) {
-    if (!name) return '?';
-    return name.trim().split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase();
-  }
-  function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  function logout() {
-    sessionStorage.removeItem('south_admin_auth');
-    sessionStorage.removeItem('south_admin_key');
-    window.location.href = '/index.html';
-  }
-
-  async function loadData() {
-    const btn = document.getElementById('refreshBtn');
-    btn.innerHTML = '<div class="spinner" style="border-top-color:var(--green);width:12px;height:12px;border-width:2px;"></div> Cargando';
-    btn.disabled = true;
-
-    try {
-      const res = await fetch(EDGE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-secret-key': adminKey || ''
-        },
-        body: JSON.stringify({})
-      });
-
-      if (res.status === 401) {
-        logout();
-        return;
-      }
-
-      const data = await res.json();
-      renderData(data);
-      document.getElementById('lastUpdate').textContent =
-        'última actualización: ' + new Date().toLocaleTimeString('es-AR');
-    } catch(e) {
-      // En demo mode mostramos datos de ejemplo
-      renderData(getMockData());
-      document.getElementById('lastUpdate').textContent = 'modo demo · sin conexión';
-    }
-
-    btn.innerHTML = '<i class="ti ti-refresh"></i> Actualizar';
-    btn.disabled = false;
-  }
-
-  function getMockData() {
-    return {
-      users: {
-        total: 12,
-        list: [
-          { nombre: 'Martina Rodríguez', email: 'martina@empresa.com', created_at: '2025-05-10T10:00:00Z' },
-          { nombre: 'Lucas Fernández', email: 'lucas@ventas.io', created_at: '2025-05-08T14:30:00Z' },
-          { nombre: 'Valeria Sosa', email: 'valeria@south.io', created_at: '2025-05-01T09:00:00Z' },
-          { nombre: 'Tomás Giménez', email: 'tomas@b2b.ar', created_at: '2025-04-28T11:00:00Z' },
-          { nombre: 'Camila Torres', email: 'camila@startup.com', created_at: '2025-04-20T16:00:00Z' },
-        ]
-      },
-      tokens: { total: 7200000, input: 4800000, output: 2400000, limit: 10000000, remaining: 2800000 },
-      costs: { anthropic: 50.40, supabase: 25, vercel: 0, total: 75.40 },
-      activity: { logins: 87, aiSales: 34, aiHunting: 18, totalAiOps: 52, cases: 28 }
-    };
-  }
-
-  function renderData(data) {
-    const u = data.users || {};
-    const t = data.tokens || {};
-    const c = data.costs || {};
-    const a = data.activity || {};
-
-    // Metrics overview
-    document.getElementById('m-users').textContent = fmt(u.total || 0);
-    document.getElementById('m-logins').textContent = fmt(a.logins || 0);
-    document.getElementById('m-ai').textContent = fmt(a.totalAiOps || 0);
-    document.getElementById('m-ai-sub').textContent = (a.aiSales||0)+' sales · '+(a.aiHunting||0)+' hunting';
-    document.getElementById('m-cost').textContent = fmtUSD(c.total || 0);
-
-    const pct = t.limit ? Math.round((t.total / t.limit) * 100) : 0;
-    document.getElementById('m-tokens').textContent = fmtM(t.total || 0);
-    document.getElementById('m-tokens-pct').textContent = pct + '% del límite';
-
-    // Token bar
-    const bar = document.getElementById('tokBar');
-    bar.style.width = Math.min(pct, 100) + '%';
-    bar.className = 'tok-bar-fill' + (pct >= 90 ? ' crit' : pct >= 70 ? ' warn' : '');
-
-    const pill = document.getElementById('tokPill');
-    if (pct >= 90) {
-      pill.className = 'pill pill-red';
-      pill.textContent = pct + '% · Crítico';
-    } else if (pct >= 70) {
-      pill.className = 'pill pill-amber';
-      pill.textContent = pct + '% · Atención';
-    } else {
-      pill.className = 'pill pill-green';
-      pill.textContent = pct + '% · OK';
-    }
-
-    document.getElementById('tokUsed').textContent = fmtM(t.total || 0);
-    document.getElementById('tokRem').textContent = fmtM(t.remaining || 0);
-    document.getElementById('tokLimit').textContent = fmtM(t.limit || 0);
-    document.getElementById('tokIn').textContent = fmtM(t.input || 0);
-    document.getElementById('tokOut').textContent = fmtM(t.output || 0);
-
-    // Alert
-    const banner = document.getElementById('alertBanner');
-    if (pct >= 90) {
-      banner.className = 'alert-banner show crit';
-      document.getElementById('alertMsg').textContent =
-        '⚠ Tokens críticos: ' + pct + '% consumido. Quedan ' + fmtM(t.remaining||0) + ' tokens. Considerá aumentar el límite o el saldo.';
-    } else if (pct >= 70) {
-      banner.className = 'alert-banner show';
-      document.getElementById('alertMsg').textContent =
-        'Los tokens están al ' + pct + '% de uso. Quedan ' + fmtM(t.remaining||0) + ' tokens disponibles.';
-    } else {
-      banner.className = 'alert-banner';
-    }
-
-    // Costs
-    document.getElementById('c-anthropic').textContent = fmtUSD(c.anthropic || 0);
-    document.getElementById('c-supabase').textContent = fmtUSD(c.supabase || 0);
-    document.getElementById('c-vercel').textContent = fmtUSD(c.vercel || 0);
-    document.getElementById('c-total').textContent = fmtUSD(c.total || 0);
-
-    // AI ops
-    document.getElementById('ai-sales').textContent = fmt(a.aiSales || 0);
-    document.getElementById('ai-hunting').textContent = fmt(a.aiHunting || 0);
-    document.getElementById('loginsTotal').textContent = fmt(a.logins || 0) + ' logins';
-
-    // Users table
-    renderUsersTable(u.list || []);
-    document.getElementById('usersBadge').textContent = (u.total||0) + ' usuarios';
-
-    // Charts
-    renderOpsChart(a.aiSales||0, a.aiHunting||0);
-    renderLoginsChart(a.logins||0);
-  }
-
-  function renderUsersTable(users) {
-    const wrap = document.getElementById('usersTableWrap');
-    if (!users.length) {
-      wrap.innerHTML = '<div class="loading-state" style="color:var(--text-3);">Sin usuarios registrados.</div>';
-      return;
-    }
-    wrap.innerHTML = '<table class="users-table"><thead><tr>' +
-      '<th>Usuario</th><th>Email</th><th>Registrado</th></tr></thead>' +
-      '<tbody>' + users.map(u => {
-        const d = u.created_at
-          ? new Date(u.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' })
-          : '—';
-        return '<tr>' +
-          '<td><div class="user-name-cell"><span class="user-avatar">' + escHtml(initials(u.nombre)) + '</span>' +
-          '<span>' + escHtml(u.nombre || 'Sin nombre') + '</span></div></td>' +
-          '<td><span class="u-mono">' + escHtml(u.email || '—') + '</span></td>' +
-          '<td><span class="u-date">' + d + '</span></td>' +
-          '</tr>';
-      }).join('') + '</tbody></table>';
-  }
-
-  function renderOpsChart(sales, hunting) {
-    if (opsChart) opsChart.destroy();
-    opsChart = new Chart(document.getElementById('opsChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Sales Cases', 'Hunting'],
-        datasets: [{
-          data: [sales, hunting],
-          backgroundColor: ['#1D9E75', '#5DCAA5'],
-          borderRadius: 4,
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11, family: 'DM Mono' } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 5 } }
-        }
-      }
+  try {
+    const res = await fetch(EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-secret-key': adminKey || '' },
+      body: JSON.stringify({})
     });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    renderData(data);
+    document.getElementById('lastUpdate').textContent =
+      'última actualización: ' + new Date().toLocaleTimeString('es-AR');
+  } catch(e) {
+    // Si falla la conexión mostramos datos de demostración
+    renderData(getDemoData());
+    document.getElementById('lastUpdate').textContent = 'modo demo · sin conexión';
+    showToast('Sin conexión — mostrando datos de demo', true);
   }
 
-  function renderLoginsChart(total) {
-    if (loginsChart) loginsChart.destroy();
-    const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-    const base = Math.max(1, Math.floor(total / 7));
-    const mock = days.map(() => Math.max(0, base + Math.round((Math.random() - 0.4) * base * 0.8)));
+  btn.innerHTML = '<i class="ti ti-refresh"></i> Actualizar';
+  btn.disabled = false;
+}
 
-    loginsChart = new Chart(document.getElementById('loginsChart'), {
-      type: 'line',
-      data: {
-        labels: days,
-        datasets: [{
-          data: mock,
-          borderColor: '#1D9E75',
-          backgroundColor: 'rgba(29,158,117,0.07)',
-          borderWidth: 1.5, fill: true, tension: 0.4,
-          pointRadius: 3, pointBackgroundColor: '#1D9E75',
-          pointBorderColor: 'transparent'
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11 } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 2 } }
-        }
-      }
-    });
+function getDemoData() {
+  return {
+    users: {
+      total: 3,
+      list: [
+        { nombre: 'Ezequiel Nievas', email: 'ezequiel.nievas@xtract.app', created_at: '2026-05-18T02:21:10Z' },
+        { nombre: 'Juan Álvarez',    email: 'juan.alvarez@xtract.app',    created_at: '2026-05-18T19:29:04Z' },
+        { nombre: 'Ezequiel',        email: 'nievas.e10@gmail.com',        created_at: '2026-05-10T02:33:30Z' },
+      ]
+    },
+    tokens:   { total: 0, input: 0, output: 0, limit: 10_000_000, remaining: 10_000_000 },
+    costs:    { anthropic: 0, supabase: 25, vercel: 0, total: 25 },
+    activity: { logins: 0, aiSales: 0, aiHunting: 0, totalAiOps: 0, cases: 3 }
+  };
+}
+
+function renderData(data) {
+  const u = data.users    || {};
+  const t = data.tokens   || {};
+  const c = data.costs    || {};
+  const a = data.activity || {};
+
+  // Overview metrics
+  document.getElementById('m-users').textContent   = fmt(u.total || 0);
+  document.getElementById('m-logins').textContent  = fmt(a.logins || 0);
+  document.getElementById('m-ai').textContent      = fmt(a.totalAiOps || 0);
+  document.getElementById('m-ai-sub').textContent  = (a.aiSales || 0) + ' sales · ' + (a.aiHunting || 0) + ' hunting';
+  document.getElementById('m-cost').textContent    = fmtUSD(c.total || 0);
+
+  const pct = t.limit ? Math.round((t.total / t.limit) * 100) : 0;
+  document.getElementById('m-tokens').textContent     = fmtM(t.total || 0);
+  document.getElementById('m-tokens-pct').textContent = pct + '% del límite';
+
+  // Token bar
+  const bar = document.getElementById('tokBar');
+  bar.style.width = Math.min(pct, 100) + '%';
+  bar.className = 'tok-bar-fill' + (pct >= 90 ? ' crit' : pct >= 70 ? ' warn' : '');
+
+  const pill = document.getElementById('tokPill');
+  if (pct >= 90) {
+    pill.className = 'pill pill-red'; pill.textContent = pct + '% · Crítico';
+  } else if (pct >= 70) {
+    pill.className = 'pill pill-amber'; pill.textContent = pct + '% · Atención';
+  } else {
+    pill.className = 'pill pill-green'; pill.textContent = pct + '% · OK';
   }
 
-  // Smooth scroll para nav
-  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      this.classList.add('active');
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+  document.getElementById('tokUsed').textContent  = fmtM(t.total || 0);
+  document.getElementById('tokRem').textContent   = fmtM(t.remaining || 0);
+  document.getElementById('tokLimit').textContent = fmtM(t.limit || 0);
+  document.getElementById('tokIn').textContent    = fmtM(t.input || 0);
+  document.getElementById('tokOut').textContent   = fmtM(t.output || 0);
+
+  // Alert banner
+  const banner = document.getElementById('alertBanner');
+  if (pct >= 90) {
+    banner.className = 'alert-banner show crit';
+    document.getElementById('alertMsg').textContent =
+      '⚠ Tokens críticos: ' + pct + '% consumido. Quedan ' + fmtM(t.remaining || 0) + ' tokens. Considerá aumentar el límite.';
+  } else if (pct >= 70) {
+    banner.className = 'alert-banner show';
+    document.getElementById('alertMsg').textContent =
+      'Los tokens están al ' + pct + '% de uso. Quedan ' + fmtM(t.remaining || 0) + ' tokens disponibles.';
+  } else {
+    banner.className = 'alert-banner';
+  }
+
+  // Costs
+  document.getElementById('c-anthropic').textContent = fmtUSD(c.anthropic || 0);
+  document.getElementById('c-supabase').textContent  = fmtUSD(c.supabase || 0);
+  document.getElementById('c-vercel').textContent    = fmtUSD(c.vercel || 0);
+  document.getElementById('c-total').textContent     = fmtUSD(c.total || 0);
+
+  // AI ops
+  document.getElementById('ai-sales').textContent   = fmt(a.aiSales || 0);
+  document.getElementById('ai-hunting').textContent = fmt(a.aiHunting || 0);
+  document.getElementById('loginsTotal').textContent = fmt(a.logins || 0) + ' logins';
+
+  // Users table
+  renderUsersTable(u.list || []);
+  document.getElementById('usersBadge').textContent = (u.total || 0) + ' usuarios';
+
+  // Charts
+  renderOpsChart(a.aiSales || 0, a.aiHunting || 0);
+  renderLoginsChart(a.logins || 0);
+}
+
+function renderUsersTable(users) {
+  const wrap = document.getElementById('usersTableWrap');
+  if (!users.length) {
+    wrap.innerHTML = '<div class="loading-state" style="color:var(--text-3)">Sin usuarios registrados.</div>';
+    return;
+  }
+  let html = '<table class="users-table"><thead><tr><th>Usuario</th><th>Email</th><th>Registrado</th></tr></thead><tbody>';
+  users.forEach(function(u) {
+    const d = u.created_at
+      ? new Date(u.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' })
+      : '—';
+    html += '<tr>' +
+      '<td><div class="user-name-cell"><span class="user-avatar">' + escHtml(initials(u.nombre)) + '</span>' +
+      '<span>' + escHtml(u.nombre || 'Sin nombre') + '</span></div></td>' +
+      '<td><span class="u-mono">' + escHtml(u.email || '—') + '</span></td>' +
+      '<td><span class="u-date">' + escHtml(d) + '</span></td>' +
+      '</tr>';
   });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
 
-  // Init
-  loadData();
+function renderOpsChart(sales, hunting) {
+  if (opsChart) opsChart.destroy();
+  opsChart = new Chart(document.getElementById('opsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Sales Cases', 'Hunting'],
+      datasets: [{ data: [sales, hunting], backgroundColor: ['#1D9E75', '#5DCAA5'], borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11, family: 'DM Mono' } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 1 } }
+      }
+    }
+  });
+}
 
-  // ── SUPABASE for tickets ──────────────────────────────────────────────
-  const SUPABASE_URL  = 'https://iquzgpkrrvtsnvaynyqj.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxdXpncGtycnZ0c252YXlueXFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDU5NTIsImV4cCI6MjA5MzY4MTk1Mn0.oP3WYTbgmQ3l15pFVFaw440AI-ViMxmiAAU471Eu8GI';
+function renderLoginsChart(total) {
+  if (loginsChart) loginsChart.destroy();
+  const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  const base = Math.max(1, Math.floor(total / 7));
+  const mock = days.map(function() { return Math.max(0, base + Math.round((Math.random() - 0.4) * base * 0.8)); });
 
-  let _allTickets = [];
-  let _supportFilter = 'all';
-  let _featuresFilter = 'all';
-  let _activeTicketId = null;
+  loginsChart = new Chart(document.getElementById('loginsChart'), {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        data: mock,
+        borderColor: '#1D9E75',
+        backgroundColor: 'rgba(29,158,117,0.07)',
+        borderWidth: 1.5, fill: true, tension: 0.4,
+        pointRadius: 3, pointBackgroundColor: '#1D9E75', pointBorderColor: 'transparent'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#555550', font: { size: 11 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#555550', font: { size: 10 }, stepSize: 1 } }
+      }
+    }
+  });
+}
 
-  async function sbFetch(path, opts = {}) {
-    const res = await fetch(SUPABASE_URL + path, {
+// ── TICKETS ─────────────────────────────────────────────────────────────────
+// Leemos los tickets via la Edge Function admin-metrics que usa service role
+// para bypasear las RLS policies de la tabla support_tickets.
+// La escritura (INSERT) y actualización (PATCH) usan REST directo porque:
+//   - INSERT: el admin de South está autenticado en Supabase (RLS ok con auth.uid())
+//   - PATCH: el admin del backoffice necesita service role → usamos Edge Function
+// ─────────────────────────────────────────────────────────────────────────────
+
+let _allTickets    = [];
+let _supportFilter = 'all';
+let _featuresFilter = 'all';
+let _activeTicketId = null;
+
+// Llamada a la Edge Function admin-metrics para leer tickets
+async function loadTickets() {
+  try {
+    const res = await fetch(EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-secret-key': adminKey || '' },
+      body: JSON.stringify({ getTickets: true })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    // La Edge Function devuelve { tickets: [...] } cuando getTickets=true
+    _allTickets = data.tickets || [];
+    updateBadges();
+    renderSupportTable();
+    renderFeaturesTable();
+  } catch(e) {
+    // Si no está implementado en la Edge Function aún, intenta con REST
+    // usando la anon key (fallará con RLS pero lo manejamos gracefully)
+    await loadTicketsFallback();
+  }
+}
+
+// Fallback: lectura directa via REST con anon key
+// Funciona SOLO si la policy "Service role full access" aplica también a anon
+// En producción esto fallará con RLS → actualizar la Edge Function admin-metrics
+async function loadTicketsFallback() {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/support_tickets?select=*&order=created_at.desc', {
       headers: {
         'apikey': SUPABASE_ANON,
         'Authorization': 'Bearer ' + SUPABASE_ANON,
         'Content-Type': 'application/json',
-        'Prefer': 'return=representation',
-        ...opts.headers,
-      },
-      ...opts,
+      }
     });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
-  }
-
-  async function loadTickets() {
-    try {
-      const data = await sbFetch('/rest/v1/support_tickets?select=*&order=created_at.desc');
-      _allTickets = data || [];
-      updateBadges();
-      renderSupportTable();
-      renderFeaturesTable();
-    } catch(e) {
-      document.getElementById('support-table-wrap').innerHTML =
-        '<div class="tickets-empty" style="color:var(--red)">Error al cargar tickets: ' + escHtml(e.message) + '</div>';
-      document.getElementById('features-table-wrap').innerHTML = '';
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText);
     }
+    _allTickets = await res.json() || [];
+    updateBadges();
+    renderSupportTable();
+    renderFeaturesTable();
+  } catch(e) {
+    const msg = '<div class="tickets-empty" style="flex-direction:column;gap:8px">' +
+      '<div style="color:var(--red)">⚠ No se pudieron cargar los tickets</div>' +
+      '<div style="font-size:11px;font-family:DM Mono,monospace;color:var(--text-3)">Actualizá la Edge Function admin-metrics para incluir los tickets via service role.</div>' +
+      '</div>';
+    document.getElementById('support-table-wrap').innerHTML = msg;
+    document.getElementById('features-table-wrap').innerHTML = '';
+    document.getElementById('support-badge-count').textContent = 'error';
+    document.getElementById('features-badge-count').textContent = 'error';
   }
+}
 
-  function updateBadges() {
-    const openErrors   = _allTickets.filter(t => t.type === 'error' && t.status !== 'closed').length;
-    const openFeatures = _allTickets.filter(t => t.type === 'feature' && t.status !== 'closed').length;
-    const be = document.getElementById('badge-support');
-    const bf = document.getElementById('badge-features');
-    be.style.display = openErrors > 0 ? '' : 'none'; be.textContent = openErrors;
-    bf.style.display = openFeatures > 0 ? '' : 'none'; bf.textContent = openFeatures;
-    document.getElementById('support-badge-count').textContent =
-      _allTickets.filter(t => t.type === 'error').length + ' tickets';
-    document.getElementById('features-badge-count').textContent =
-      _allTickets.filter(t => t.type === 'feature').length + ' features';
-  }
-
-  function filterTickets(status, section, btn) {
-    if (section === 'support') _supportFilter = status;
-    else _featuresFilter = status;
-    const group = section === 'support' ? 'support-filters' : 'features-filters';
-    document.querySelectorAll('#' + group + ' .f-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (section === 'support') renderSupportTable();
-    else renderFeaturesTable();
-  }
-
-  function renderSupportTable() {
-    renderTicketTable(
-      _allTickets.filter(t => t.type === 'error'),
-      _supportFilter,
-      'support-table-wrap'
-    );
-  }
-
-  function renderFeaturesTable() {
-    renderTicketTable(
-      _allTickets.filter(t => t.type === 'feature'),
-      _featuresFilter,
-      'features-table-wrap'
-    );
-  }
-
-  function renderTicketTable(tickets, filter, wrapperId) {
-    const wrap = document.getElementById(wrapperId);
-    let list = tickets;
-    if (filter !== 'all') list = list.filter(t => t.status === filter);
-
-    if (!list.length) {
-      wrap.innerHTML = '<div class="tickets-empty"><i class="ti ti-inbox" style="font-size:20px;opacity:.3"></i> Sin tickets en esta categoría</div>';
-      return;
-    }
-
-    const stMap = {
-      open:     { lbl: 'Abierto',  cls: 'open' },
-      progress: { lbl: 'En curso', cls: 'progress' },
-      closed:   { lbl: 'Cerrado',  cls: 'closed' },
-    };
-    const typeMap = {
-      error:   { lbl: '🐛 Error',   cls: 'error' },
-      feature: { lbl: '💡 Feature', cls: 'feature' },
-    };
-
-    wrap.innerHTML = '<table class="users-table" style="table-layout:fixed;width:100%">' +
-      '<colgroup><col style="width:80px"><col style="width:100%"><col style="width:160px"><col style="width:90px"><col style="width:85px"></colgroup>' +
-      '<thead><tr><th>Tipo</th><th>Asunto</th><th>Usuario</th><th>Estado</th><th>Fecha</th></tr></thead>' +
-      '<tbody>' + list.map(t => {
-        const st  = stMap[t.status] || stMap.open;
-        const tp  = typeMap[t.type] || typeMap.error;
-        const dt  = new Date(t.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short' });
-        const rep = t.reply ? ' <span style="font-size:9px;color:var(--green)">✓ respondido</span>' : '';
-        return '<tr class="ticket-row" onclick="openTicket('' + escHtml(String(t.id)) + '')">' +
-          '<td><span class="tc-type ' + tp.cls + '">' + tp.lbl + '</span></td>' +
-          '<td><div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' +
-            escHtml(t.subject || '(sin asunto)') + rep + '</div>' +
-            '<div style="font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">' +
-            escHtml((t.body || '').substring(0, 80)) + '</div></td>' +
-          '<td><span class="u-mono">' + escHtml(t.user_email || 'Anónimo') + '</span></td>' +
-          '<td><span class="tc-status ' + st.cls + '">' + st.lbl + '</span></td>' +
-          '<td><span class="u-date">' + dt + '</span></td>' +
-          '</tr>';
-      }).join('') + '</tbody></table>';
-  }
-
-  function openTicket(ticketId) {
-    const t = _allTickets.find(x => String(x.id) === String(ticketId));
-    if (!t) return;
-    _activeTicketId = ticketId;
-
-    const stMap  = { open:'Abierto', progress:'En curso', closed:'Cerrado' };
-    const dt     = new Date(t.created_at).toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    const isErr  = t.type === 'error';
-
-    document.getElementById('dp-title').textContent = t.subject || '(sin asunto)';
-    document.getElementById('dp-meta').innerHTML =
-      '<span>' + (isErr ? '🐛 Error' : '💡 Feature') + '</span>' +
-      '<span>👤 ' + escHtml(t.user_email || 'Anónimo') + '</span>' +
-      '<span>📅 ' + dt + '</span>';
-
-    document.getElementById('dp-body').innerHTML =
-      '<div class="dp-section">Mensaje del usuario</div>' +
-      '<div class="dp-msg-box">' + escHtml(t.body || '') + '</div>' +
-      (t.reply ? '<div class="dp-section">Respuesta enviada</div>' +
-        '<div class="dp-reply-box"><div class="dp-reply-lbl">✓ Respuesta del equipo South</div>' +
-        '<div class="dp-reply-text">' + escHtml(t.reply) + '</div></div>' : '');
-
-    document.getElementById('dp-foot').innerHTML =
-      '<div class="dp-status-row">' +
-        '<span class="dp-status-lbl">Estado:</span>' +
-        '<button class="st-btn ' + (t.status==='open'?'active-open':'') + '" onclick="setStatus('' + ticketId + '','open',this)">🟡 Abierto</button>' +
-        '<button class="st-btn ' + (t.status==='progress'?'active-progress':'') + '" onclick="setStatus('' + ticketId + '','progress',this)">🟢 En curso</button>' +
-        '<button class="st-btn ' + (t.status==='closed'?'active-closed':'') + '" onclick="setStatus('' + ticketId + '','closed',this)">⚫ Cerrado</button>' +
-      '</div>' +
-      (isErr ? '<div>' +
-        '<div class="dp-section" style="margin-bottom:6px">' + (t.reply ? '✏ Editar respuesta' : '💬 Responder al usuario') + '</div>' +
-        '<textarea class="dp-textarea" id="dp-reply-txt" placeholder="Escribí tu respuesta…">' + escHtml(t.reply || '') + '</textarea>' +
-      '</div>' +
-      '<button class="dp-send-btn" id="dp-send-btn" onclick="sendReply('' + ticketId + '')">Enviar respuesta →</button>'
-      :
-      '<button class="dp-close-only" onclick="setStatus('' + ticketId + '','closed',null);closeDetail()">✓ Marcar como revisado</button>');
-
-    document.getElementById('detail-overlay').classList.add('open');
-    document.getElementById('detail-panel').classList.add('open');
-  }
-
-  function closeDetail() {
-    document.getElementById('detail-overlay').classList.remove('open');
-    document.getElementById('detail-panel').classList.remove('open');
-    _activeTicketId = null;
-  }
-
-  async function setStatus(ticketId, status, btn) {
-    try {
-      await sbFetch('/rest/v1/support_tickets?id=eq.' + ticketId, {
-        method: 'PATCH',
-        body: JSON.stringify({ status }),
-      });
-      const idx = _allTickets.findIndex(t => String(t.id) === String(ticketId));
-      if (idx >= 0) _allTickets[idx].status = status;
-      updateBadges(); renderSupportTable(); renderFeaturesTable();
-      document.querySelectorAll('.st-btn').forEach(b => b.className = 'st-btn');
-      if (btn) btn.classList.add('active-' + status);
-      showToast('Estado actualizado → ' + { open:'Abierto', progress:'En curso', closed:'Cerrado' }[status]);
-    } catch(e) { showToast('Error: ' + e.message, true); }
-  }
-
-  async function sendReply(ticketId) {
-    const reply = document.getElementById('dp-reply-txt')?.value.trim();
-    if (!reply) { showToast('Escribí una respuesta primero', true); return; }
-    const btn = document.getElementById('dp-send-btn');
-    btn.disabled = true; btn.textContent = 'Enviando…';
-    try {
-      await sbFetch('/rest/v1/support_tickets?id=eq.' + ticketId, {
-        method: 'PATCH',
-        body: JSON.stringify({ reply, status: 'closed', replied_at: new Date().toISOString() }),
-      });
-      const idx = _allTickets.findIndex(t => String(t.id) === String(ticketId));
-      if (idx >= 0) { _allTickets[idx].reply = reply; _allTickets[idx].status = 'closed'; }
-      updateBadges(); renderSupportTable(); renderFeaturesTable();
-      closeDetail();
-      showToast('Respuesta enviada y ticket cerrado ✓');
-    } catch(e) {
-      showToast('Error al enviar: ' + e.message, true);
-      btn.disabled = false; btn.textContent = 'Enviar respuesta →';
-    }
-  }
-
-  // ── Toast ──
-  let _toastEl;
-  function showToast(msg, isErr) {
-    if (!_toastEl) {
-      _toastEl = document.createElement('div');
-      _toastEl.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:999;background:#1c1c1c;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:11px 16px;font-size:12px;color:#f0f0ee;transition:all .25s;transform:translateY(12px);opacity:0;max-width:320px;font-family:Syne,sans-serif';
-      document.body.appendChild(_toastEl);
-    }
-    _toastEl.textContent = msg;
-    _toastEl.style.borderColor = isErr ? 'rgba(226,75,74,.3)' : 'rgba(29,158,117,.3)';
-    _toastEl.style.opacity = '1'; _toastEl.style.transform = 'translateY(0)';
-    clearTimeout(_toastEl._t);
-    _toastEl._t = setTimeout(() => { _toastEl.style.opacity='0'; _toastEl.style.transform='translateY(12px)'; }, 3200);
-  }
-
-  // Load tickets on init
-  loadTickets();
-
-  // Scroll spy for nav active state
-  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      this.classList.add('active');
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Actualizamos estado y reply via la Edge Function (service role)
+// o directo via REST si la Edge Function no lo soporta aún
+async function patchTicket(ticketId, payload) {
+  // Primero intentamos via Edge Function (más seguro)
+  try {
+    const res = await fetch(EDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-secret-key': adminKey || '' },
+      body: JSON.stringify({ patchTicket: true, ticketId, payload })
     });
+    if (res.ok) return;
+  } catch(_) { /* fallback */ }
+
+  // Fallback: REST directo
+  const res2 = await fetch(SUPABASE_URL + '/rest/v1/support_tickets?id=eq.' + encodeURIComponent(ticketId), {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res2.ok) throw new Error(await res2.text());
+}
+
+function updateBadges() {
+  const openErrors   = _allTickets.filter(function(t) { return t.type === 'error'   && t.status !== 'closed'; }).length;
+  const openFeatures = _allTickets.filter(function(t) { return t.type === 'feature' && t.status !== 'closed'; }).length;
+  const totalErrors  = _allTickets.filter(function(t) { return t.type === 'error';   }).length;
+  const totalFeats   = _allTickets.filter(function(t) { return t.type === 'feature'; }).length;
+
+  const be = document.getElementById('badge-support');
+  const bf = document.getElementById('badge-features');
+  be.style.display = openErrors   > 0 ? '' : 'none'; be.textContent = openErrors;
+  bf.style.display = openFeatures > 0 ? '' : 'none'; bf.textContent = openFeatures;
+
+  document.getElementById('support-badge-count').textContent  = totalErrors  + ' tickets';
+  document.getElementById('features-badge-count').textContent = totalFeats   + ' features';
+
+  // Support overview counters
+  var errTickets  = _allTickets.filter(function(t) { return t.type === 'error'; });
+  var featTickets = _allTickets.filter(function(t) { return t.type === 'feature'; });
+
+  if (errTickets.length > 0) {
+    document.getElementById('support-overview').style.display = 'grid';
+    document.getElementById('so-open').textContent     = errTickets.filter(function(t){ return t.status==='open'; }).length;
+    document.getElementById('so-progress').textContent = errTickets.filter(function(t){ return t.status==='progress'; }).length;
+    document.getElementById('so-closed').textContent   = errTickets.filter(function(t){ return t.status==='closed'; }).length;
+  }
+  if (featTickets.length > 0) {
+    document.getElementById('features-overview').style.display = 'grid';
+    document.getElementById('fo-open').textContent     = featTickets.filter(function(t){ return t.status==='open'; }).length;
+    document.getElementById('fo-progress').textContent = featTickets.filter(function(t){ return t.status==='progress'; }).length;
+    document.getElementById('fo-closed').textContent   = featTickets.filter(function(t){ return t.status==='closed'; }).length;
+  }
+}
+
+function filterTickets(status, section, btn) {
+  if (section === 'support') _supportFilter = status;
+  else _featuresFilter = status;
+  const groupId = section === 'support' ? 'support-filters' : 'features-filters';
+  document.querySelectorAll('#' + groupId + ' .f-pill').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  if (section === 'support') renderSupportTable();
+  else renderFeaturesTable();
+}
+
+function renderSupportTable() {
+  renderTicketTable(
+    _allTickets.filter(function(t) { return t.type === 'error'; }),
+    _supportFilter,
+    'support-table-wrap'
+  );
+}
+
+function renderFeaturesTable() {
+  renderTicketTable(
+    _allTickets.filter(function(t) { return t.type === 'feature'; }),
+    _featuresFilter,
+    'features-table-wrap'
+  );
+}
+
+function renderTicketTable(tickets, filter, wrapperId) {
+  const wrap = document.getElementById(wrapperId);
+  var list = filter === 'all' ? tickets : tickets.filter(function(t) { return t.status === filter; });
+
+  if (!list.length) {
+    wrap.innerHTML = '<div class="tickets-empty"><i class="ti ti-inbox" style="font-size:20px;opacity:.3"></i> &nbsp;Sin tickets en esta categoría</div>';
+    return;
+  }
+
+  const stMap = {
+    open:     { lbl: 'Abierto',  cls: 'open' },
+    progress: { lbl: 'En curso', cls: 'progress' },
+    closed:   { lbl: 'Cerrado',  cls: 'closed' },
+  };
+  const typeMap = {
+    error:   { lbl: '🐛 Error',   cls: 'error' },
+    feature: { lbl: '💡 Feature', cls: 'feature' },
+  };
+
+  // Asignamos número secuencial según orden cronológico de creación
+  // del tipo específico (errores numerados entre sí, features entre sí)
+  var allOfType = _allTickets
+    .filter(function(t) { return t.type === tickets[0].type; })
+    .slice().sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
+
+  var numMap = {};
+  allOfType.forEach(function(t, i) { numMap[t.id] = i + 1; });
+
+  var html = '<table class="users-table" style="table-layout:fixed;width:100%">' +
+    '<colgroup>' +
+    '<col style="width:50px">' +
+    '<col style="width:80px">' +
+    '<col style="width:100%">' +
+    '<col style="width:160px">' +
+    '<col style="width:90px">' +
+    '<col style="width:85px">' +
+    '</colgroup>' +
+    '<thead><tr>' +
+    '<th>#</th><th>Tipo</th><th>Asunto</th><th>Usuario</th><th>Estado</th><th>Fecha</th>' +
+    '</tr></thead><tbody>';
+
+  list.forEach(function(t) {
+    const st  = stMap[t.status]  || stMap.open;
+    const tp  = typeMap[t.type]  || typeMap.error;
+    const dt  = new Date(t.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short' });
+    const num = numMap[t.id] || '—';
+    const rep = t.reply ? ' <span style="font-size:9px;color:var(--green);font-weight:700">✓</span>' : '';
+    const tid = escHtml(String(t.id));
+
+    html += '<tr class="ticket-row" onclick="openTicket(\'' + tid + '\')">' +
+      '<td><span class="tc-num">#' + num + '</span></td>' +
+      '<td><span class="tc-type ' + tp.cls + '">' + tp.lbl + '</span></td>' +
+      '<td>' +
+        '<div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' +
+          escHtml(t.subject || '(sin asunto)') + rep +
+        '</div>' +
+        '<div style="font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">' +
+          escHtml((t.body || '').substring(0, 80)) +
+        '</div>' +
+      '</td>' +
+      '<td><span class="u-mono">' + escHtml(t.user_email || 'Anónimo') + '</span></td>' +
+      '<td><span class="tc-status ' + st.cls + '">' + st.lbl + '</span></td>' +
+      '<td><span class="u-date">' + escHtml(dt) + '</span></td>' +
+      '</tr>';
   });
 
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function openTicket(ticketId) {
+  const t = _allTickets.find(function(x) { return String(x.id) === String(ticketId); });
+  if (!t) return;
+  _activeTicketId = ticketId;
+
+  const isErr = t.type === 'error';
+  const dt    = new Date(t.created_at).toLocaleDateString('es-AR', {
+    weekday:'long', day:'numeric', month:'long', year:'numeric'
+  });
+
+  // Número del ticket dentro de su tipo
+  var allOfType = _allTickets
+    .filter(function(x) { return x.type === t.type; })
+    .slice().sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
+  var num = allOfType.findIndex(function(x) { return x.id === t.id; }) + 1;
+
+  document.getElementById('dp-ticket-num').textContent =
+    (isErr ? '🐛 Error' : '💡 Feature') + ' · #' + num;
+  document.getElementById('dp-title').textContent = t.subject || '(sin asunto)';
+  document.getElementById('dp-meta').innerHTML =
+    '<span>👤 ' + escHtml(t.user_email || 'Anónimo') + '</span>' +
+    '<span>📅 ' + escHtml(dt) + '</span>';
+
+  // Cuerpo del panel
+  var bodyHtml = '<div class="dp-section">Mensaje del usuario</div>' +
+    '<div class="dp-msg-box">' + escHtml(t.body || '(sin cuerpo)') + '</div>';
+
+  if (t.reply) {
+    bodyHtml += '<div class="dp-section">Respuesta enviada</div>' +
+      '<div class="dp-reply-box">' +
+        '<div class="dp-reply-lbl">✓ Respuesta del equipo South</div>' +
+        '<div class="dp-reply-text">' + escHtml(t.reply) + '</div>' +
+      '</div>';
+  }
+  document.getElementById('dp-body').innerHTML = bodyHtml;
+
+  // Footer: estados + respuesta
+  const tid = escHtml(String(t.id));
+  var footHtml = '<div class="dp-status-row">' +
+    '<span class="dp-status-lbl">Estado:</span>' +
+    '<button class="st-btn ' + (t.status==='open'?'active-open':'') + '" onclick="setStatus(\'' + tid + '\',\'open\',this)">🟡 Abierto</button>' +
+    '<button class="st-btn ' + (t.status==='progress'?'active-progress':'') + '" onclick="setStatus(\'' + tid + '\',\'progress\',this)">🟢 En curso</button>' +
+    '<button class="st-btn ' + (t.status==='closed'?'active-closed':'') + '" onclick="setStatus(\'' + tid + '\',\'closed\',this)">⚫ Cerrado</button>' +
+    '</div>';
+
+  if (isErr) {
+    footHtml +=
+      '<div><div class="dp-section" style="margin-bottom:6px">' +
+        (t.reply ? '✏ Editar respuesta' : '💬 Responder al usuario') +
+      '</div>' +
+      '<textarea class="dp-textarea" id="dp-reply-txt" placeholder="Escribí tu respuesta al usuario…">' +
+        escHtml(t.reply || '') +
+      '</textarea></div>' +
+      '<button class="dp-send-btn" id="dp-send-btn" onclick="sendReply(\'' + tid + '\')">Enviar respuesta →</button>';
+  } else {
+    footHtml +=
+      '<button class="dp-close-only" onclick="setStatus(\'' + tid + '\',\'closed\',null);closeDetail()">✓ Marcar como revisado</button>';
+  }
+
+  document.getElementById('dp-foot').innerHTML = footHtml;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+  _activeTicketId = null;
+}
+
+async function setStatus(ticketId, status, btn) {
+  try {
+    await patchTicket(ticketId, { status });
+    const idx = _allTickets.findIndex(function(t) { return String(t.id) === String(ticketId); });
+    if (idx >= 0) _allTickets[idx].status = status;
+    updateBadges();
+    renderSupportTable();
+    renderFeaturesTable();
+    // Actualizar botones activos en el panel
+    document.querySelectorAll('.st-btn').forEach(function(b) { b.className = 'st-btn'; });
+    if (btn) btn.classList.add('active-' + status);
+    showToast('Estado → ' + ({open:'Abierto', progress:'En curso', closed:'Cerrado'}[status] || status));
+  } catch(e) {
+    showToast('Error al actualizar estado: ' + e.message, true);
+  }
+}
+
+async function sendReply(ticketId) {
+  const replyEl = document.getElementById('dp-reply-txt');
+  const reply   = replyEl ? replyEl.value.trim() : '';
+  if (!reply) { showToast('Escribí una respuesta primero', true); return; }
+
+  const btn = document.getElementById('dp-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
+
+  try {
+    await patchTicket(ticketId, { reply, status: 'closed', replied_at: new Date().toISOString() });
+    const idx = _allTickets.findIndex(function(t) { return String(t.id) === String(ticketId); });
+    if (idx >= 0) {
+      _allTickets[idx].reply   = reply;
+      _allTickets[idx].status  = 'closed';
+    }
+    updateBadges();
+    renderSupportTable();
+    renderFeaturesTable();
+    closeDetail();
+    showToast('Respuesta enviada y ticket cerrado ✓');
+  } catch(e) {
+    showToast('Error al enviar respuesta: ' + e.message, true);
+    if (btn) { btn.disabled = false; btn.textContent = 'Enviar respuesta →'; }
+  }
+}
+
+// ── NAV ACTIVE STATE ─────────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item[href^="#"]').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    this.classList.add('active');
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+async function loadAll() {
+  await Promise.all([loadData(), loadTickets()]);
+}
+
+loadAll();
 </script>
 </body>
 </html>
