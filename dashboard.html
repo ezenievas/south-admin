@@ -292,6 +292,59 @@
   .pill-amber { background: rgba(186,117,23,0.12); color: #EF9F27; }
   .pill-red { background: rgba(226,75,74,0.10); color: #F09595; }
   .pill-gray { background: rgba(255,255,255,0.06); color: var(--text-3); border: 1px solid var(--border); }
+
+  /* ── TICKETS ── */
+  .ticket-row { cursor: pointer; transition: background 0.12s; }
+  .ticket-row:hover td { background: rgba(255,255,255,0.03) !important; }
+  .tc-type { padding:2px 7px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-family:'DM Mono',monospace; }
+  .tc-type.error { background:rgba(226,75,74,.12); color:#F09595; }
+  .tc-type.feature { background:rgba(186,117,23,.12); color:#EF9F27; }
+  .tc-status { padding:2px 7px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; font-family:'DM Mono',monospace; }
+  .tc-status.open { background:rgba(186,117,23,.12); color:#EF9F27; }
+  .tc-status.progress { background:rgba(29,158,117,.12); color:#5DCAA5; }
+  .tc-status.closed { background:rgba(255,255,255,.06); color:var(--text-3); }
+
+  /* ── DETAIL PANEL ── */
+  .detail-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;backdrop-filter:blur(2px); }
+  .detail-overlay.open { display:block; }
+  .detail-panel {
+    position:fixed;top:0;right:0;bottom:0;width:480px;
+    background:var(--surface);border-left:1px solid var(--border-hover);
+    z-index:201;display:flex;flex-direction:column;
+    transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+  }
+  .detail-panel.open { transform:translateX(0); }
+  .dp-head { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex;align-items:flex-start;gap:10px;flex-shrink:0; }
+  .dp-close { background:var(--surface2);border:1px solid var(--border);color:var(--text-3);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0; }
+  .dp-close:hover { color:var(--text);border-color:var(--border-hover); }
+  .dp-body { flex:1;overflow-y:auto;padding:1.25rem 1.5rem; }
+  .dp-section { font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px; }
+  .dp-msg-box { background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px;font-size:13px;color:var(--text-2);line-height:1.65;white-space:pre-wrap; }
+  .dp-reply-box { background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.2);border-radius:9px;padding:14px;margin-bottom:14px; }
+  .dp-reply-lbl { font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:6px; }
+  .dp-reply-text { font-size:12px;color:var(--text-2);line-height:1.6;white-space:pre-wrap; }
+  .dp-foot { padding:1rem 1.5rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:8px; }
+  .dp-status-row { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+  .dp-status-lbl { font-size:11px;color:var(--text-3); }
+  .st-btn { padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text-3);font-family:'Syne',sans-serif;transition:all .12s; }
+  .st-btn:hover { border-color:var(--border-hover);color:var(--text-2); }
+  .st-btn.active-open { border-color:rgba(186,117,23,.5);color:#EF9F27;background:rgba(186,117,23,.08); }
+  .st-btn.active-progress { border-color:rgba(29,158,117,.5);color:var(--green);background:var(--green-dim); }
+  .st-btn.active-closed { border-color:rgba(255,255,255,.15);color:var(--text-2); }
+  .dp-textarea { width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-family:'DM Mono',monospace;outline:none;min-height:80px;resize:vertical;transition:border-color .12s;line-height:1.55; }
+  .dp-textarea:focus { border-color:var(--green); }
+  .dp-textarea::placeholder { color:var(--text-3); }
+  .dp-send-btn { padding:9px 18px;border-radius:8px;background:var(--green);color:white;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .12s;align-self:flex-end; }
+  .dp-send-btn:hover { background:var(--green-dark); }
+  .dp-send-btn:disabled { opacity:.4;cursor:not-allowed; }
+  .dp-close-only { padding:9px 18px;border-radius:8px;background:var(--surface2);color:var(--text-2);border:1px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .12s;align-self:flex-end; }
+  .dp-close-only:hover { border-color:var(--border-hover);color:var(--text); }
+
+  .filters-row { display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap; }
+  .f-pill { padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-3);font-family:'Syne',sans-serif;transition:all .12s; }
+  .f-pill:hover { border-color:var(--border-hover);color:var(--text-2); }
+  .f-pill.active { background:var(--green);border-color:var(--green);color:white; }
+  .tickets-empty { display:flex;align-items:center;justify-content:center;padding:2.5rem;color:var(--text-3);font-size:13px;gap:8px; }
 </style>
 </head>
 <body>
@@ -321,6 +374,16 @@
   <span class="nav-section" style="margin-top:1.5rem;">Datos</span>
   <a class="nav-item" href="#usuarios">
     <i class="ti ti-users"></i> Usuarios
+  </a>
+
+  <span class="nav-section" style="margin-top:1.5rem;">Soporte</span>
+  <a class="nav-item" href="#soporte" id="nav-soporte">
+    <i class="ti ti-message-circle"></i> Tickets
+    <span id="badge-support" style="margin-left:auto;background:var(--red);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;display:none">0</span>
+  </a>
+  <a class="nav-item" href="#features" id="nav-features">
+    <i class="ti ti-bulb"></i> Features
+    <span id="badge-features" style="margin-left:auto;background:var(--amber);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;display:none">0</span>
   </a>
 
   <div class="sidebar-footer">
@@ -482,7 +545,61 @@
     </div>
   </section>
 
+  <!-- SOPORTE -->
+  <section id="soporte" style="scroll-margin-top:1.5rem">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <div class="panel-title"><i class="ti ti-message-circle" aria-hidden="true"></i> Tickets de soporte</div>
+        <span class="pill pill-gray" id="support-badge-count">cargando…</span>
+      </div>
+      <div class="filters-row" id="support-filters">
+        <button class="f-pill active" onclick="filterTickets('all','support',this)">Todos</button>
+        <button class="f-pill" onclick="filterTickets('open','support',this)">🟡 Abierto</button>
+        <button class="f-pill" onclick="filterTickets('progress','support',this)">🟢 En curso</button>
+        <button class="f-pill" onclick="filterTickets('closed','support',this)">⚫ Cerrado</button>
+      </div>
+      <div id="support-table-wrap">
+        <div class="loading-state"><div class="spinner"></div> Cargando tickets...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" style="scroll-margin-top:1.5rem">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <div class="panel-title"><i class="ti ti-bulb" aria-hidden="true"></i> Feature requests</div>
+        <span class="pill pill-gray" id="features-badge-count">cargando…</span>
+      </div>
+      <div class="filters-row" id="features-filters">
+        <button class="f-pill active" onclick="filterTickets('all','features',this)">Todos</button>
+        <button class="f-pill" onclick="filterTickets('open','features',this)">🟡 Abierto</button>
+        <button class="f-pill" onclick="filterTickets('progress','features',this)">🟢 En curso</button>
+        <button class="f-pill" onclick="filterTickets('closed','features',this)">⚫ Cerrado</button>
+      </div>
+      <div id="features-table-wrap">
+        <div class="loading-state"><div class="spinner"></div> Cargando features...</div>
+      </div>
+    </div>
+  </section>
+
 </main>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="dp-head">
+    <button class="dp-close" onclick="closeDetail()">×</button>
+    <div style="flex:1">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px" id="dp-title">—</div>
+      <div style="font-size:11px;color:var(--text-3);display:flex;gap:10px;flex-wrap:wrap" id="dp-meta"></div>
+    </div>
+  </div>
+  <div class="dp-body" id="dp-body"></div>
+  <div class="dp-foot" id="dp-foot"></div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
@@ -729,6 +846,237 @@
 
   // Init
   loadData();
+
+  // ── SUPABASE for tickets ──────────────────────────────────────────────
+  const SUPABASE_URL  = 'https://iquzgpkrrvtsnvaynyqj.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxdXpncGtycnZ0c252YXlueXFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDU5NTIsImV4cCI6MjA5MzY4MTk1Mn0.oP3WYTbgmQ3l15pFVFaw440AI-ViMxmiAAU471Eu8GI';
+
+  let _allTickets = [];
+  let _supportFilter = 'all';
+  let _featuresFilter = 'all';
+  let _activeTicketId = null;
+
+  async function sbFetch(path, opts = {}) {
+    const res = await fetch(SUPABASE_URL + path, {
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + SUPABASE_ANON,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation',
+        ...opts.headers,
+      },
+      ...opts,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
+  async function loadTickets() {
+    try {
+      const data = await sbFetch('/rest/v1/support_tickets?select=*&order=created_at.desc');
+      _allTickets = data || [];
+      updateBadges();
+      renderSupportTable();
+      renderFeaturesTable();
+    } catch(e) {
+      document.getElementById('support-table-wrap').innerHTML =
+        '<div class="tickets-empty" style="color:var(--red)">Error al cargar tickets: ' + escHtml(e.message) + '</div>';
+      document.getElementById('features-table-wrap').innerHTML = '';
+    }
+  }
+
+  function updateBadges() {
+    const openErrors   = _allTickets.filter(t => t.type === 'error' && t.status !== 'closed').length;
+    const openFeatures = _allTickets.filter(t => t.type === 'feature' && t.status !== 'closed').length;
+    const be = document.getElementById('badge-support');
+    const bf = document.getElementById('badge-features');
+    be.style.display = openErrors > 0 ? '' : 'none'; be.textContent = openErrors;
+    bf.style.display = openFeatures > 0 ? '' : 'none'; bf.textContent = openFeatures;
+    document.getElementById('support-badge-count').textContent =
+      _allTickets.filter(t => t.type === 'error').length + ' tickets';
+    document.getElementById('features-badge-count').textContent =
+      _allTickets.filter(t => t.type === 'feature').length + ' features';
+  }
+
+  function filterTickets(status, section, btn) {
+    if (section === 'support') _supportFilter = status;
+    else _featuresFilter = status;
+    const group = section === 'support' ? 'support-filters' : 'features-filters';
+    document.querySelectorAll('#' + group + ' .f-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (section === 'support') renderSupportTable();
+    else renderFeaturesTable();
+  }
+
+  function renderSupportTable() {
+    renderTicketTable(
+      _allTickets.filter(t => t.type === 'error'),
+      _supportFilter,
+      'support-table-wrap'
+    );
+  }
+
+  function renderFeaturesTable() {
+    renderTicketTable(
+      _allTickets.filter(t => t.type === 'feature'),
+      _featuresFilter,
+      'features-table-wrap'
+    );
+  }
+
+  function renderTicketTable(tickets, filter, wrapperId) {
+    const wrap = document.getElementById(wrapperId);
+    let list = tickets;
+    if (filter !== 'all') list = list.filter(t => t.status === filter);
+
+    if (!list.length) {
+      wrap.innerHTML = '<div class="tickets-empty"><i class="ti ti-inbox" style="font-size:20px;opacity:.3"></i> Sin tickets en esta categoría</div>';
+      return;
+    }
+
+    const stMap = {
+      open:     { lbl: 'Abierto',  cls: 'open' },
+      progress: { lbl: 'En curso', cls: 'progress' },
+      closed:   { lbl: 'Cerrado',  cls: 'closed' },
+    };
+    const typeMap = {
+      error:   { lbl: '🐛 Error',   cls: 'error' },
+      feature: { lbl: '💡 Feature', cls: 'feature' },
+    };
+
+    wrap.innerHTML = '<table class="users-table" style="table-layout:fixed;width:100%">' +
+      '<colgroup><col style="width:80px"><col style="width:100%"><col style="width:160px"><col style="width:90px"><col style="width:85px"></colgroup>' +
+      '<thead><tr><th>Tipo</th><th>Asunto</th><th>Usuario</th><th>Estado</th><th>Fecha</th></tr></thead>' +
+      '<tbody>' + list.map(t => {
+        const st  = stMap[t.status] || stMap.open;
+        const tp  = typeMap[t.type] || typeMap.error;
+        const dt  = new Date(t.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short' });
+        const rep = t.reply ? ' <span style="font-size:9px;color:var(--green)">✓ respondido</span>' : '';
+        return '<tr class="ticket-row" onclick="openTicket('' + escHtml(String(t.id)) + '')">' +
+          '<td><span class="tc-type ' + tp.cls + '">' + tp.lbl + '</span></td>' +
+          '<td><div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' +
+            escHtml(t.subject || '(sin asunto)') + rep + '</div>' +
+            '<div style="font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">' +
+            escHtml((t.body || '').substring(0, 80)) + '</div></td>' +
+          '<td><span class="u-mono">' + escHtml(t.user_email || 'Anónimo') + '</span></td>' +
+          '<td><span class="tc-status ' + st.cls + '">' + st.lbl + '</span></td>' +
+          '<td><span class="u-date">' + dt + '</span></td>' +
+          '</tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  function openTicket(ticketId) {
+    const t = _allTickets.find(x => String(x.id) === String(ticketId));
+    if (!t) return;
+    _activeTicketId = ticketId;
+
+    const stMap  = { open:'Abierto', progress:'En curso', closed:'Cerrado' };
+    const dt     = new Date(t.created_at).toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const isErr  = t.type === 'error';
+
+    document.getElementById('dp-title').textContent = t.subject || '(sin asunto)';
+    document.getElementById('dp-meta').innerHTML =
+      '<span>' + (isErr ? '🐛 Error' : '💡 Feature') + '</span>' +
+      '<span>👤 ' + escHtml(t.user_email || 'Anónimo') + '</span>' +
+      '<span>📅 ' + dt + '</span>';
+
+    document.getElementById('dp-body').innerHTML =
+      '<div class="dp-section">Mensaje del usuario</div>' +
+      '<div class="dp-msg-box">' + escHtml(t.body || '') + '</div>' +
+      (t.reply ? '<div class="dp-section">Respuesta enviada</div>' +
+        '<div class="dp-reply-box"><div class="dp-reply-lbl">✓ Respuesta del equipo South</div>' +
+        '<div class="dp-reply-text">' + escHtml(t.reply) + '</div></div>' : '');
+
+    document.getElementById('dp-foot').innerHTML =
+      '<div class="dp-status-row">' +
+        '<span class="dp-status-lbl">Estado:</span>' +
+        '<button class="st-btn ' + (t.status==='open'?'active-open':'') + '" onclick="setStatus('' + ticketId + '','open',this)">🟡 Abierto</button>' +
+        '<button class="st-btn ' + (t.status==='progress'?'active-progress':'') + '" onclick="setStatus('' + ticketId + '','progress',this)">🟢 En curso</button>' +
+        '<button class="st-btn ' + (t.status==='closed'?'active-closed':'') + '" onclick="setStatus('' + ticketId + '','closed',this)">⚫ Cerrado</button>' +
+      '</div>' +
+      (isErr ? '<div>' +
+        '<div class="dp-section" style="margin-bottom:6px">' + (t.reply ? '✏ Editar respuesta' : '💬 Responder al usuario') + '</div>' +
+        '<textarea class="dp-textarea" id="dp-reply-txt" placeholder="Escribí tu respuesta…">' + escHtml(t.reply || '') + '</textarea>' +
+      '</div>' +
+      '<button class="dp-send-btn" id="dp-send-btn" onclick="sendReply('' + ticketId + '')">Enviar respuesta →</button>'
+      :
+      '<button class="dp-close-only" onclick="setStatus('' + ticketId + '','closed',null);closeDetail()">✓ Marcar como revisado</button>');
+
+    document.getElementById('detail-overlay').classList.add('open');
+    document.getElementById('detail-panel').classList.add('open');
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-overlay').classList.remove('open');
+    document.getElementById('detail-panel').classList.remove('open');
+    _activeTicketId = null;
+  }
+
+  async function setStatus(ticketId, status, btn) {
+    try {
+      await sbFetch('/rest/v1/support_tickets?id=eq.' + ticketId, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      });
+      const idx = _allTickets.findIndex(t => String(t.id) === String(ticketId));
+      if (idx >= 0) _allTickets[idx].status = status;
+      updateBadges(); renderSupportTable(); renderFeaturesTable();
+      document.querySelectorAll('.st-btn').forEach(b => b.className = 'st-btn');
+      if (btn) btn.classList.add('active-' + status);
+      showToast('Estado actualizado → ' + { open:'Abierto', progress:'En curso', closed:'Cerrado' }[status]);
+    } catch(e) { showToast('Error: ' + e.message, true); }
+  }
+
+  async function sendReply(ticketId) {
+    const reply = document.getElementById('dp-reply-txt')?.value.trim();
+    if (!reply) { showToast('Escribí una respuesta primero', true); return; }
+    const btn = document.getElementById('dp-send-btn');
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    try {
+      await sbFetch('/rest/v1/support_tickets?id=eq.' + ticketId, {
+        method: 'PATCH',
+        body: JSON.stringify({ reply, status: 'closed', replied_at: new Date().toISOString() }),
+      });
+      const idx = _allTickets.findIndex(t => String(t.id) === String(ticketId));
+      if (idx >= 0) { _allTickets[idx].reply = reply; _allTickets[idx].status = 'closed'; }
+      updateBadges(); renderSupportTable(); renderFeaturesTable();
+      closeDetail();
+      showToast('Respuesta enviada y ticket cerrado ✓');
+    } catch(e) {
+      showToast('Error al enviar: ' + e.message, true);
+      btn.disabled = false; btn.textContent = 'Enviar respuesta →';
+    }
+  }
+
+  // ── Toast ──
+  let _toastEl;
+  function showToast(msg, isErr) {
+    if (!_toastEl) {
+      _toastEl = document.createElement('div');
+      _toastEl.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:999;background:#1c1c1c;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:11px 16px;font-size:12px;color:#f0f0ee;transition:all .25s;transform:translateY(12px);opacity:0;max-width:320px;font-family:Syne,sans-serif';
+      document.body.appendChild(_toastEl);
+    }
+    _toastEl.textContent = msg;
+    _toastEl.style.borderColor = isErr ? 'rgba(226,75,74,.3)' : 'rgba(29,158,117,.3)';
+    _toastEl.style.opacity = '1'; _toastEl.style.transform = 'translateY(0)';
+    clearTimeout(_toastEl._t);
+    _toastEl._t = setTimeout(() => { _toastEl.style.opacity='0'; _toastEl.style.transform='translateY(12px)'; }, 3200);
+  }
+
+  // Load tickets on init
+  loadTickets();
+
+  // Scroll spy for nav active state
+  document.querySelectorAll('.nav-item[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
 </script>
 </body>
 </html>
