@@ -562,6 +562,11 @@
         <div class="tok-row"><span>Tokens usados</span><span class="tok-val" id="tokUsed">—</span></div>
         <div class="tok-row"><span>Tokens restantes</span><span class="tok-val" id="tokRem">—</span></div>
         <div class="tok-row"><span>Límite mensual</span><span class="tok-val" id="tokLimit">—</span></div>
+        <div style="margin-top:8px;padding:8px 0;border-top:1px solid var(--border)">
+          <div class="tok-row" style="margin-bottom:2px"><span>💰 Presupuesto USD</span><span class="tok-val" id="budgetTotal">— USD/mes</span></div>
+          <div class="tok-row" style="margin-bottom:2px"><span>Gastado</span><span class="tok-val" id="budgetUsed">—</span></div>
+          <div class="tok-row"><span>Disponible</span><span class="tok-val" id="budgetRem" style="color:var(--green)">—</span></div>
+        </div>
         <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
           <div class="tok-row"><span>Input tokens</span><span class="tok-val" id="tokIn">—</span></div>
           <div class="tok-row" style="margin-top:4px"><span>Output tokens</span><span class="tok-val" id="tokOut">—</span></div>
@@ -849,38 +854,49 @@ function renderData(data) {
   document.getElementById('m-tokens').textContent     = fmtM(t.total || 0);
   document.getElementById('m-tokens-pct').textContent = pct + '% del límite';
 
-  // Token bar
+  // Token bar — basada en % del presupuesto USD consumido
+  const budget  = t.budget || {};
+  const budgPct = budget.usedPct || pct;  // preferir % de USD si está disponible
+
   const bar = document.getElementById('tokBar');
-  bar.style.width = Math.min(pct, 100) + '%';
-  bar.className = 'tok-bar-fill' + (pct >= 90 ? ' crit' : pct >= 70 ? ' warn' : '');
+  bar.style.width = Math.min(budgPct, 100) + '%';
+  bar.className = 'tok-bar-fill' + (budgPct >= 90 ? ' crit' : budgPct >= 70 ? ' warn' : '');
 
   const pill = document.getElementById('tokPill');
-  if (pct >= 90) {
-    pill.className = 'pill pill-red'; pill.textContent = pct + '% · Crítico';
-  } else if (pct >= 70) {
-    pill.className = 'pill pill-amber'; pill.textContent = pct + '% · Atención';
+  if (budgPct >= 90) {
+    pill.className = 'pill pill-red'; pill.textContent = budgPct.toFixed(1) + '% · Crítico';
+  } else if (budgPct >= 70) {
+    pill.className = 'pill pill-amber'; pill.textContent = budgPct.toFixed(1) + '% · Atención';
   } else {
-    pill.className = 'pill pill-green'; pill.textContent = pct + '% · OK';
+    pill.className = 'pill pill-green'; pill.textContent = budgPct.toFixed(1) + '% · OK';
   }
 
   document.getElementById('tokUsed').textContent  = fmtM(t.total || 0);
   document.getElementById('tokRem').textContent   = fmtM(t.remaining || 0);
-  document.getElementById('tokLimit').textContent = fmtM(t.limit || 0);
+  document.getElementById('tokLimit').textContent = fmtM(t.limit || 0) + ' (≈$' + (budget.monthly || 20) + ' USD)';
   document.getElementById('tokIn').textContent    = fmtM(t.input || 0);
   document.getElementById('tokOut').textContent   = fmtM(t.output || 0);
 
-  // Alert banner
+  // Alert banner — basado en gasto USD real
   const banner = document.getElementById('alertBanner');
-  if (pct >= 90) {
+  if (budgPct >= 90) {
     banner.className = 'alert-banner show crit';
     document.getElementById('alertMsg').textContent =
-      '⚠ Tokens críticos: ' + pct + '% consumido. Quedan ' + fmtM(t.remaining || 0) + ' tokens. Considerá aumentar el límite.';
-  } else if (pct >= 70) {
+      '⚠ Presupuesto crítico: ' + budgPct.toFixed(1) + '% consumido ($' + (budget.used || 0).toFixed(2) + ' de $' + (budget.monthly || 20) + '). Quedan $' + (budget.remaining || 0).toFixed(2) + ' USD.';
+  } else if (budgPct >= 70) {
     banner.className = 'alert-banner show';
     document.getElementById('alertMsg').textContent =
-      'Los tokens están al ' + pct + '% de uso. Quedan ' + fmtM(t.remaining || 0) + ' tokens disponibles.';
+      'Presupuesto al ' + budgPct.toFixed(1) + '% de uso. Consumido: $' + (budget.used || 0).toFixed(2) + ' de $' + (budget.monthly || 20) + ' USD. Quedan $' + (budget.remaining || 0).toFixed(2) + '.';
   } else {
     banner.className = 'alert-banner';
+  }
+
+  // Budget USD (campos nuevos del admin-metrics)
+  if (t.budget) {
+    var b = t.budget;
+    document.getElementById('budgetTotal').textContent = '$' + (b.monthly || 20).toFixed(2) + ' USD/mes';
+    document.getElementById('budgetUsed').textContent  = '$' + (b.used || 0).toFixed(4) + ' USD';
+    document.getElementById('budgetRem').textContent   = '$' + (b.remaining || 20).toFixed(4) + ' USD';
   }
 
   // Costs
@@ -900,7 +916,7 @@ function renderData(data) {
 
   // Charts
   renderOpsChart(a.aiSales || 0, a.aiHunting || 0);
-  renderLoginsChart(a.logins || 0);
+  renderLoginsChart(a.logins || 0, a.loginsByDay || null);
 }
 
 function renderUsersTable(users) {
@@ -944,11 +960,28 @@ function renderOpsChart(sales, hunting) {
   });
 }
 
-function renderLoginsChart(total) {
+function renderLoginsChart(total, loginsByDay) {
   if (loginsChart) loginsChart.destroy();
-  const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-  const base = Math.max(1, Math.floor(total / 7));
-  const mock = days.map(function() { return Math.max(0, base + Math.round((Math.random() - 0.4) * base * 0.8)); });
+
+  // Usar datos reales por día si están disponibles
+  let labels = [];
+  let values = [];
+  const DAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  if (loginsByDay && Object.keys(loginsByDay).length > 0) {
+    // loginsByDay = { "2026-06-01": 3, "2026-06-02": 1, ... }
+    const sorted = Object.keys(loginsByDay).sort();
+    sorted.forEach(function(dateStr) {
+      const d = new Date(dateStr + 'T12:00:00');
+      labels.push(DAY_NAMES[d.getDay()] + ' ' + d.getDate());
+      values.push(loginsByDay[dateStr]);
+    });
+  } else {
+    // Fallback si no hay datos reales
+    const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const base = Math.max(1, Math.floor(total / 7));
+    labels = days;
+    values = days.map(function() { return Math.max(0, base + Math.round((Math.random() - 0.4) * base * 0.8)); });
+  }
 
   loginsChart = new Chart(document.getElementById('loginsChart'), {
     type: 'line',

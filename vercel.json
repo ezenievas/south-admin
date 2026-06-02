@@ -1,14 +1,16 @@
 {
+  "cleanUrls": false,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/auth/gmail/callback", "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
-        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Robots-Tag",        "value": "noindex, nofollow" },
+        { "key": "X-Frame-Options",     "value": "DENY" },
         { "key": "X-Content-Type-Options", "value": "nosniff" }
       ]
     }
