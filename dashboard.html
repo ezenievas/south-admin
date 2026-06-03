@@ -415,24 +415,7 @@
   .st-btn.active-progress { border-color: rgba(29,158,117,.5); color: var(--green); background: var(--green-dim); }
   .st-btn.active-closed   { border-color: rgba(255,255,255,.15); color: var(--text-2); }
 
-  .dp-textarea {
-    width: 100%; padding: 10px 12px; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace;
-    outline: none; min-height: 80px; resize: vertical;
-    transition: border-color .12s; line-height: 1.55;
-  }
-  .dp-textarea:focus { border-color: var(--green); }
-  .dp-textarea::placeholder { color: var(--text-3); }
 
-  .dp-send-btn {
-    padding: 9px 18px; border-radius: 8px; background: var(--green);
-    color: white; border: none; font-size: 12px; font-weight: 700;
-    cursor: pointer; font-family: 'Syne', sans-serif;
-    transition: all .12s; align-self: flex-end;
-  }
-  .dp-send-btn:hover { background: var(--green-dark); }
-  .dp-send-btn:disabled { opacity: .4; cursor: not-allowed; }
 
   .dp-close-only {
     padding: 9px 18px; border-radius: 8px; background: var(--surface2);
@@ -672,7 +655,7 @@
         <button class="f-pill active" onclick="filterTickets('all','support',this)">Todos</button>
         <button class="f-pill" onclick="filterTickets('open','support',this)">🟡 Abierto</button>
         <button class="f-pill" onclick="filterTickets('progress','support',this)">🟢 En curso</button>
-        <button class="f-pill" onclick="filterTickets('closed','support',this)">⚫ Cerrado</button>
+        <button class="f-pill" onclick="filterTickets('closed','support',this)">📁 Ver cerrados</button>
       </div>
       <div id="support-table-wrap">
         <div class="loading-state"><div class="spinner"></div> Cargando tickets...</div>
@@ -706,7 +689,7 @@
         <button class="f-pill active" onclick="filterTickets('all','features',this)">Todos</button>
         <button class="f-pill" onclick="filterTickets('open','features',this)">🟡 Abierto</button>
         <button class="f-pill" onclick="filterTickets('progress','features',this)">🟢 En curso</button>
-        <button class="f-pill" onclick="filterTickets('closed','features',this)">⚫ Revisado</button>
+        <button class="f-pill" onclick="filterTickets('closed','features',this)">📁 Ver cerrados</button>
       </div>
       <div id="features-table-wrap">
         <div class="loading-state"><div class="spinner"></div> Cargando features...</div>
@@ -925,16 +908,25 @@ function renderUsersTable(users) {
     wrap.innerHTML = '<div class="loading-state" style="color:var(--text-3)">Sin usuarios registrados.</div>';
     return;
   }
-  let html = '<table class="users-table"><thead><tr><th>Usuario</th><th>Email</th><th>Registrado</th></tr></thead><tbody>';
+  let html = '<table class="users-table"><thead><tr><th>Usuario</th><th>Email</th><th>Registrado</th><th>Último login</th></tr></thead><tbody>';
   users.forEach(function(u) {
     const d = u.created_at
       ? new Date(u.created_at).toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' })
       : '—';
+    // Último login: buscamos en admin_events el login más reciente de este user
+    // La Edge Function ya devuelve last_login si está disponible en el objeto
+    var lastLogin = '—';
+    if (u.last_login) {
+      var ll = new Date(u.last_login);
+      lastLogin = ll.toLocaleDateString('es-AR', { day:'2-digit', month:'short' }) +
+                  ' ' + ll.toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+    }
     html += '<tr>' +
       '<td><div class="user-name-cell"><span class="user-avatar">' + escHtml(initials(u.nombre)) + '</span>' +
       '<span>' + escHtml(u.nombre || 'Sin nombre') + '</span></div></td>' +
       '<td><span class="u-mono">' + escHtml(u.email || '—') + '</span></td>' +
       '<td><span class="u-date">' + escHtml(d) + '</span></td>' +
+      '<td><span class="u-date" style="color:var(--green)">' + escHtml(lastLogin) + '</span></td>' +
       '</tr>';
   });
   html += '</tbody></table>';
@@ -1143,24 +1135,28 @@ function filterTickets(status, section, btn) {
 }
 
 function renderSupportTable() {
-  renderTicketTable(
-    _allTickets.filter(function(t) { return t.type === 'error'; }),
-    _supportFilter,
-    'support-table-wrap'
-  );
+  // Por defecto ('all') excluimos los cerrados de la vista principal.
+  // Solo se muestran si el filtro activo es explícitamente 'closed'.
+  var tickets = _allTickets.filter(function(t) { return t.type === 'error'; });
+  if (_supportFilter !== 'closed') {
+    tickets = tickets.filter(function(t) { return t.status !== 'closed'; });
+  }
+  renderTicketTable(tickets, _supportFilter, 'support-table-wrap');
 }
 
 function renderFeaturesTable() {
-  renderTicketTable(
-    _allTickets.filter(function(t) { return t.type === 'feature'; }),
-    _featuresFilter,
-    'features-table-wrap'
-  );
+  var tickets = _allTickets.filter(function(t) { return t.type === 'feature'; });
+  if (_featuresFilter !== 'closed') {
+    tickets = tickets.filter(function(t) { return t.status !== 'closed'; });
+  }
+  renderTicketTable(tickets, _featuresFilter, 'features-table-wrap');
 }
 
 function renderTicketTable(tickets, filter, wrapperId) {
   const wrap = document.getElementById(wrapperId);
-  var list = filter === 'all' ? tickets : tickets.filter(function(t) { return t.status === filter; });
+  // tickets ya viene pre-filtrado (sin cerrados cuando filter !== 'closed').
+  // Solo sub-filtramos si es un estado específico (open o progress).
+  var list = (filter === 'all' || filter === 'closed') ? tickets : tickets.filter(function(t) { return t.status === filter; });
 
   if (!list.length) {
     wrap.innerHTML = '<div class="tickets-empty"><i class="ti ti-inbox" style="font-size:20px;opacity:.3"></i> &nbsp;Sin tickets en esta categoría</div>';
@@ -1264,28 +1260,17 @@ function openTicket(ticketId) {
   }
   document.getElementById('dp-body').innerHTML = bodyHtml;
 
-  // Footer: estados + respuesta
+  // Footer: solo gestión de estado (sin respuesta — el canal de respuesta es externo)
   const tid = escHtml(String(t.id));
   var footHtml = '<div class="dp-status-row">' +
     '<span class="dp-status-lbl">Estado:</span>' +
     '<button class="st-btn ' + (t.status==='open'?'active-open':'') + '" onclick="setStatus(\'' + tid + '\',\'open\',this)">🟡 Abierto</button>' +
     '<button class="st-btn ' + (t.status==='progress'?'active-progress':'') + '" onclick="setStatus(\'' + tid + '\',\'progress\',this)">🟢 En curso</button>' +
     '<button class="st-btn ' + (t.status==='closed'?'active-closed':'') + '" onclick="setStatus(\'' + tid + '\',\'closed\',this)">⚫ Cerrado</button>' +
+    '</div>' +
+    '<div style="font-size:11px;color:var(--text-3);margin-top:4px;font-family:DM Mono,monospace">' +
+      '↳ La respuesta al usuario se gestiona por fuera del sistema (email, WhatsApp, etc.)' +
     '</div>';
-
-  if (isErr) {
-    footHtml +=
-      '<div><div class="dp-section" style="margin-bottom:6px">' +
-        (t.reply ? '✏ Editar respuesta' : '💬 Responder al usuario') +
-      '</div>' +
-      '<textarea class="dp-textarea" id="dp-reply-txt" placeholder="Escribí tu respuesta al usuario…">' +
-        escHtml(t.reply || '') +
-      '</textarea></div>' +
-      '<button class="dp-send-btn" id="dp-send-btn" onclick="sendReply(\'' + tid + '\')">Enviar respuesta →</button>';
-  } else {
-    footHtml +=
-      '<button class="dp-close-only" onclick="setStatus(\'' + tid + '\',\'closed\',null);closeDetail()">✓ Marcar como revisado</button>';
-  }
 
   document.getElementById('dp-foot').innerHTML = footHtml;
   document.getElementById('detail-overlay').classList.add('open');
@@ -1306,40 +1291,22 @@ async function setStatus(ticketId, status, btn) {
     updateBadges();
     renderSupportTable();
     renderFeaturesTable();
+    // Si se cerró el ticket, cerrar el panel lateral automáticamente
+    if (status === 'closed') {
+      closeDetail();
+      showToast('Ticket cerrado y removido de la lista ✓');
+      return;
+    }
     // Actualizar botones activos en el panel
     document.querySelectorAll('.st-btn').forEach(function(b) { b.className = 'st-btn'; });
     if (btn) btn.classList.add('active-' + status);
-    showToast('Estado → ' + ({open:'Abierto', progress:'En curso', closed:'Cerrado'}[status] || status));
+    showToast('Estado → ' + ({open:'Abierto', progress:'En curso'}[status] || status));
   } catch(e) {
     showToast('Error al actualizar estado: ' + e.message, true);
   }
 }
 
-async function sendReply(ticketId) {
-  const replyEl = document.getElementById('dp-reply-txt');
-  const reply   = replyEl ? replyEl.value.trim() : '';
-  if (!reply) { showToast('Escribí una respuesta primero', true); return; }
 
-  const btn = document.getElementById('dp-send-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
-
-  try {
-    await patchTicket(ticketId, { reply, status: 'closed', replied_at: new Date().toISOString() });
-    const idx = _allTickets.findIndex(function(t) { return String(t.id) === String(ticketId); });
-    if (idx >= 0) {
-      _allTickets[idx].reply   = reply;
-      _allTickets[idx].status  = 'closed';
-    }
-    updateBadges();
-    renderSupportTable();
-    renderFeaturesTable();
-    closeDetail();
-    showToast('Respuesta enviada y ticket cerrado ✓');
-  } catch(e) {
-    showToast('Error al enviar respuesta: ' + e.message, true);
-    if (btn) { btn.disabled = false; btn.textContent = 'Enviar respuesta →'; }
-  }
-}
 
 // ── NAV ACTIVE STATE ─────────────────────────────────────────────────────────
 document.querySelectorAll('.nav-item[href^="#"]').forEach(function(link) {
@@ -1352,12 +1319,24 @@ document.querySelectorAll('.nav-item[href^="#"]').forEach(function(link) {
   });
 });
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// ── INIT + AUTO-REFRESH ──────────────────────────────────────────────────────
+// Auto-refresh cada 60s. Si el panel de detalle está abierto (usuario leyendo
+// un ticket o feature), el ciclo se omite sin interrumpir y reintenta al siguiente.
 async function loadAll() {
   await Promise.all([loadData(), loadTickets()]);
 }
 
+function scheduleAutoRefresh() {
+  setInterval(function() {
+    const panelOpen = document.getElementById('detail-panel').classList.contains('open');
+    if (panelOpen) return; // no interrumpir si hay panel abierto
+    loadData();
+    loadTickets();
+  }, 60000);
+}
+
 loadAll();
+scheduleAutoRefresh();
 </script>
 </body>
 </html>
